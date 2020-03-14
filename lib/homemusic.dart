@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:syhmusic/module/song.dart';
+
+import 'Viewmodel/CurSongModel.dart';
 
 Dio dio = Dio();
 
@@ -21,7 +26,7 @@ class HomeMusicState extends State<HomeMusic>
     with AutomaticKeepAliveClientMixin {
   List<Results> songlist = new List();
   ScrollController _scrollController;
-  bool firstload = true;
+  StreamController<List<Results>> _streamController;
   bool isLoading = true;
   bool isNoMore = false;
 
@@ -29,12 +34,20 @@ class HomeMusicState extends State<HomeMusic>
   void initState() {
     // TODO: implement initState
     super.initState();
+    _streamController = StreamController.broadcast();
+    _streamController.stream.listen(onData);
+    _addDataToStream();
+  }
 
-    getData().then((value) {
-      setState(() {
-        songlist.addAll(value);
-      });
+  void onData(List<Results> value) {
+    setState(() {
+      songlist.addAll(value);
     });
+  }
+
+  void _addDataToStream() async {
+    print('Add data to stream.');
+    _streamController.sink.add(await getData());
   }
 
   @override
@@ -42,6 +55,7 @@ class HomeMusicState extends State<HomeMusic>
     super.dispose();
     // 这里不要忘了将监听移除
     _scrollController.dispose();
+    _streamController.close();
   }
 
   Future<List<Results>> getData() async {
@@ -71,14 +85,20 @@ class HomeMusicState extends State<HomeMusic>
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    if (songlist.length == 0) {
-      return Container(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-    return buildListView(context, songlist);
+    return StreamBuilder(
+      stream: _streamController.stream,
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return Container(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          return buildListView(context, snapshot.data);
+        }
+      },
+    );
   }
 
   Widget buildListView(BuildContext context, List<Results> list) {
@@ -97,20 +117,15 @@ class HomeMusicState extends State<HomeMusic>
           );
         }
         Results bean = list[index];
-        return new ListTile(
-          title: Text(bean.albumName),
-          subtitle: Text(bean.artistName, maxLines: 1),
-          leading: new Image.network(bean.albumImage),
-//          onTap: () {
-//            Navigator.push(
-//                context,
-//                MaterialPageRoute(
-//                    builder: (context) {
-//                      return PostShow(post: bean);
-//                    },
-//                    maintainState: false)); //直接打开路由
-//          },
-        );
+        return Consumer<CurSongModel>(
+            builder: (context, CurSongModel cursong, _) => ListTile(
+                  title: Text(bean.albumName),
+                  subtitle: Text(bean.artistName, maxLines: 1),
+                  leading: new Image.network(bean.albumImage),
+                  onTap: () {
+                    cursong.setCurSong(bean);
+                  },
+                ));
       },
       itemCount: list.length + 1,
       controller: _scrollController,
