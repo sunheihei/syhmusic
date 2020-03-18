@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
+import 'package:syhmusic/player.dart';
 import 'Viewmodel/CurSongModel.dart';
 import 'drawerdemo.dart';
 
@@ -77,7 +78,12 @@ class HomePager extends StatelessWidget {
                 children: <Widget>[HomeMusic(0), HomeMusic(1), HomeMusic(2)],
               ),
               Positioned(
-                child: bottombar(),
+                child: GestureDetector(
+                    child: bottombar(),
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => Player()));
+                    }),
               )
             ],
           )),

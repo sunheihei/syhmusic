@@ -122,6 +122,10 @@ class HomeMusicState extends State<HomeMusic>
                   title: Text(bean.albumName),
                   subtitle: Text(bean.artistName, maxLines: 1),
                   leading: new Image.network(bean.albumImage),
+                  trailing: IconButton(
+                    icon: Icon(Icons.more_vert),
+                    onPressed:() { /* Your code */ },
+                  ),
                   onTap: () {
                     cursong.setCurSong(bean);
                   },
