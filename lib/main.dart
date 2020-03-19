@@ -2,17 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
-import 'package:syhmusic/player.dart';
+import 'package:syhmusic/view/BaseAppBar.dart';
+import 'package:syhmusic/view/playappbar.dart';
 import 'Viewmodel/CurSongModel.dart';
 import 'drawerdemo.dart';
+import 'player.dart';
 
-void main() => runApp(MyApp());
+final curmusic = CurSongModel();
+
+void main() {
+  runApp(MultiProvider(
+//    providers: [ChangeNotifierProvider.value(value: curmusic)],
+    providers: [
+      ChangeNotifierProvider(create: (_) => CurSongModel()),
+    ],
+    child: MyApp(),
+  ));
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-
-  final curmusic = CurSongModel();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,10 +30,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MultiProvider(
-          providers: [ChangeNotifierProvider.value(value: curmusic)],
-          child: HomePager(),
-        ));
+        home: HomePager());
   }
 }
 
@@ -90,3 +96,37 @@ class HomePager extends StatelessWidget {
     );
   }
 }
+
+//class Player extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return Scaffold(
+//      appBar: BaseViewBar(
+//        childView: playappbar(),
+//        preferredSize: Size.fromHeight(50.0),
+//      ),
+//      body: PlayerMain(),
+//    );
+//  }
+//}
+//
+//class PlayerMain extends StatefulWidget {
+//  @override
+//  _PlayerMainState createState() => _PlayerMainState();
+//}
+//
+//class _PlayerMainState extends State<PlayerMain> {
+//  @override
+//  Widget build(BuildContext context) {
+//    return Container(
+//      child: Consumer<CurSongModel>(
+//        builder: (context, CurSongModel cursong, _) {
+//          if (cursong.value != null) {
+//            return Text(cursong.value.albumName);
+//          }
+//          return Text("SyhMusic");
+//        },
+//      ),
+//    );
+//  }
+//}

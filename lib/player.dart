@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:syhmusic/view/BaseAppBar.dart';
+import 'package:syhmusic/view/playappbar.dart';
+
+import 'viewmodel/CurSongModel.dart';
 
 class Player extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("Player"),
+      appBar: BaseViewBar(
+        childView: playappbar(),
+        preferredSize: Size.fromHeight(50.0),
       ),
       body: PlayerMain(),
     );
@@ -21,6 +26,15 @@ class PlayerMain extends StatefulWidget {
 class _PlayerMainState extends State<PlayerMain> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Consumer<CurSongModel>(
+        builder: (context, CurSongModel cursong, child) {
+          if (cursong.value != null) {
+            return Text(cursong.value.albumName);
+          }
+          return Text("SyhMusic");
+        },
+      ),
+    );
   }
 }
