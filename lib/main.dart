@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
-import 'package:syhmusic/view/BaseAppBar.dart';
-import 'package:syhmusic/view/playappbar.dart';
-import 'Viewmodel/CurSongModel.dart';
+
 import 'drawerdemo.dart';
 import 'player.dart';
+import 'viewmodel/cursongmodel.dart';
 
-final curmusic = CurSongModel();
+final curmusic = cursongmodel();
 
 void main() {
   runApp(MultiProvider(
 //    providers: [ChangeNotifierProvider.value(value: curmusic)],
     providers: [
-      ChangeNotifierProvider(create: (_) => CurSongModel()),
+      ChangeNotifierProvider(create: (_) => cursongmodel()),
     ],
     child: MyApp(),
   ));
@@ -41,11 +40,12 @@ class HomePager extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-//        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-//        floatingActionButton: FloatingActionButton(
-//          onPressed: () => debugPrint('local button is pressed'),
-//          child: Icon(Icons.file_download),
-//        ),
+//          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+//          floatingActionButton: FloatingActionButton(
+//            onPressed: () => Navigator.of(context)
+//                .push(MaterialPageRoute(builder: (context) => SecondPage())),
+//            child: Icon(Icons.file_download),
+//          ),
           drawer: DrawerDemo(),
           appBar: AppBar(
             title: Text("SyhMusic"),
@@ -85,48 +85,13 @@ class HomePager extends StatelessWidget {
               ),
               Positioned(
                 child: GestureDetector(
-                    child: bottombar(),
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Player()));
-                    }),
+                  child: bottombar(),
+                  onTap: () => Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => player())),
+                ),
               )
             ],
           )),
     );
   }
 }
-
-//class Player extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return Scaffold(
-//      appBar: BaseViewBar(
-//        childView: playappbar(),
-//        preferredSize: Size.fromHeight(50.0),
-//      ),
-//      body: PlayerMain(),
-//    );
-//  }
-//}
-//
-//class PlayerMain extends StatefulWidget {
-//  @override
-//  _PlayerMainState createState() => _PlayerMainState();
-//}
-//
-//class _PlayerMainState extends State<PlayerMain> {
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container(
-//      child: Consumer<CurSongModel>(
-//        builder: (context, CurSongModel cursong, _) {
-//          if (cursong.value != null) {
-//            return Text(cursong.value.albumName);
-//          }
-//          return Text("SyhMusic");
-//        },
-//      ),
-//    );
-//  }
-//}

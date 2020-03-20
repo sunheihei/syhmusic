@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:syhmusic/module/song.dart';
+import 'package:syhmusic/viewmodel/cursongmodel.dart';
 
-import 'Viewmodel/CurSongModel.dart';
 
 Dio dio = Dio();
 
@@ -117,8 +117,8 @@ class HomeMusicState extends State<HomeMusic>
           );
         }
         Results bean = list[index];
-        return Consumer<CurSongModel>(
-            builder: (context, CurSongModel cursong, _) => ListTile(
+        return Consumer<cursongmodel>(
+            builder: (context, cursongmodel cursong, _) => ListTile(
                   title: Text(bean.albumName),
                   subtitle: Text(bean.artistName, maxLines: 1),
                   leading: new Image.network(bean.albumImage),

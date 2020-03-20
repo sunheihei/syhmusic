@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:syhmusic/module/song.dart';
 
-class CurSongModel with ChangeNotifier {
+class cursongmodel with ChangeNotifier {
 
   Results _mcursong;
 

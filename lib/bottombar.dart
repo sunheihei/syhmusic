@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'Viewmodel/CurSongModel.dart';
+import 'package:syhmusic/viewmodel/cursongmodel.dart';
 
 class bottombar extends StatefulWidget {
   @override
@@ -20,8 +19,8 @@ class BottomState extends State<bottombar> {
     return Container(
         height: 64,
         color: Colors.white,
-        child: Consumer<CurSongModel>(
-            builder: (context, CurSongModel cursong, _) {
+        child: Consumer<cursongmodel>(
+            builder: (context, cursongmodel cursong, _) {
               if (cursong.value != null) {
                 mcursong = true;
               }

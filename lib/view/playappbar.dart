@@ -1,6 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:syhmusic/viewmodel/CurSongModel.dart';
+import 'package:syhmusic/viewmodel/cursongmodel.dart';
 
 class playappbar extends StatefulWidget {
   @override
@@ -11,25 +12,23 @@ class _playappbarState extends State<playappbar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).accentColor,
-        height: 56,
         child: Row(
           children: <Widget>[
             IconButton(
               icon: Icon(
                 Icons.arrow_back_ios,
-                color: Colors.white,
+                color: Colors.black38,
               ),
-              onPressed: null,
+              onPressed: () => Navigator.pop(context),
             ),
-//            Consumer<CurSongModel>(
-//              builder: (context, CurSongModel cursong, _) {
-//                if (cursong.value != null) {
-//                  return Text(cursong.value.albumName);
-//                }
-//                return Text("SyhMusic");
-//              },
-//            ),
+            Consumer<cursongmodel>(
+              builder: (context, cursongmodel cursong, _) {
+                return Text(
+                  cursong.value != null ? cursong.value.albumName : "SyhMusic",
+                  style: TextStyle(color: Colors.black38,fontSize: 24),
+                );
+              },
+            ),
           ],
         ));
   }
