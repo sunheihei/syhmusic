@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:syhmusic/module/song.dart';
 import 'package:syhmusic/viewmodel/cursongmodel.dart';
-
 
 Dio dio = Dio();
 
@@ -64,15 +65,15 @@ class HomeMusicState extends State<HomeMusic>
     switch (widget.type) {
       case 0:
         url =
-            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=popularity_total&offset=0";
+        "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=popularity_total&offset=0";
         break;
       case 1:
         url =
-            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=downloads_total&offset=0";
+        "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=downloads_total&offset=0";
         break;
       case 2:
         url =
-            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=listens_total&offset=0";
+        "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=listens_total&offset=0";
         break;
     }
 
@@ -90,6 +91,7 @@ class HomeMusicState extends State<HomeMusic>
       builder: (context, snapshot) {
         if (snapshot.data == null) {
           return Container(
+            color: Colors.white,
             child: Center(
               child: CircularProgressIndicator(),
             ),
@@ -106,6 +108,7 @@ class HomeMusicState extends State<HomeMusic>
       itemBuilder: (context, index) {
         if (index == list.length) {
           return Container(
+            color: Colors.white,
             padding: const EdgeInsets.all(16.0),
             alignment: Alignment.center,
             child: SizedBox(
@@ -118,18 +121,80 @@ class HomeMusicState extends State<HomeMusic>
         }
         Results bean = list[index];
         return Consumer<cursongmodel>(
-            builder: (context, cursongmodel cursong, _) => ListTile(
-                  title: Text(bean.albumName),
-                  subtitle: Text(bean.artistName, maxLines: 1),
-                  leading: new Image.network(bean.albumImage),
-                  trailing: IconButton(
-                    icon: Icon(Icons.more_vert),
-                    onPressed:() { /* Your code */ },
-                  ),
+            builder: (context, cursongmodel cursong, _) =>
+                GestureDetector(
                   onTap: () {
                     cursong.setCurSong(bean);
                   },
-                ));
+                  child: Container(
+                      height: 80,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ClipRRect(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10.0)),
+                              child: Image.network(bean.albumImage),
+                            ),
+                            Expanded(
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        bean.albumName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Color(0xFF274D85),
+                                          fontSize: 24.0,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 6.0,
+                                      ),
+                                      Text(
+                                        bean.artistName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Color(0xFF274D85),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: Color(0xFF274D85),
+                                  size: 32,
+                                ),
+                                onPressed: null)
+                          ],
+                        ),
+                      )),
+                )
+//                ListTile(
+//                  title: Text(bean.albumName),
+//                  subtitle: Text(bean.artistName, maxLines: 1),
+//                  leading: new Image.network(bean.albumImage),
+//                  trailing: IconButton(
+//                    icon: Icon(Icons.more_vert),
+////                    onPressed:() { /* Your code */ },
+////                  ),
+//                  onTap: () {
+//                    cursong.setCurSong(bean);
+//                  },
+//                )
+        );
       },
       itemCount: list.length + 1,
       controller: _scrollController,

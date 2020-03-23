@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
 
@@ -20,78 +21,214 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'syhmusic',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: HomePager());
+        home: SafeArea(child: HomePagers()));
   }
 }
 
-class HomePager extends StatelessWidget {
+class HomePagers extends StatefulWidget {
+  @override
+  _HomePagersState createState() => _HomePagersState();
+}
+
+class _HomePagersState extends State<HomePagers> {
+  PanelController _panelController;
+  final double _radius = 25.0;
+
+  @override
+  void initState() {
+    _panelController = PanelController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _panelController.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-//          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-//          floatingActionButton: FloatingActionButton(
-//            onPressed: () => Navigator.of(context)
-//                .push(MaterialPageRoute(builder: (context) => SecondPage())),
-//            child: Icon(Icons.file_download),
-//          ),
-          drawer: DrawerDemo(),
-          appBar: AppBar(
-            title: Text("SyhMusic"),
-            elevation: 4.0,
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.search,
+    return WillPopScope(
+        onWillPop: () {
+          if (!_panelController.isPanelClosed) {
+            _panelController.close();
+          } else {}
+          return Future<bool>.value(false);
+        },
+        child: Scaffold(
+          body: SlidingUpPanel(
+            panel: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(_radius),
+                topRight: Radius.circular(_radius),
+              ),
+              child: player(controller: _panelController),
+            ),
+            controller: _panelController,
+            minHeight: 100,
+            maxHeight: MediaQuery.of(context).size.height,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(_radius),
+              topRight: Radius.circular(_radius),
+            ),
+            collapsed: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(_radius),
+                  topRight: Radius.circular(_radius),
                 ),
-                tooltip: 'Search',
-                onPressed: () => debugPrint('search button is pressed'),
-              )
-            ],
-            bottom: TabBar(
-              unselectedLabelColor: Colors.black26,
-              indicatorColor: Colors.black54,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorWeight: 1.0,
-              tabs: <Widget>[
-                Tab(
-                  text: 'HOT SONGS',
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [
+                    0.0,
+                    0.7,
+                  ],
+                  colors: [
+                    Color(0xFF47ACE1),
+                    Color(0xFFDF5F9D),
+                  ],
                 ),
-                Tab(
-                  text: 'NEW SONGS',
+              ),
+              child: GestureDetector(
+                  child: bottombar(controller: _panelController),
+                  onTap: () => _panelController.open()),
+            ),
+            body: DefaultTabController(
+              length: 3,
+              initialIndex: 0,
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Colors.white,
+                  elevation: 0.0,
+                  automaticallyImplyLeading: false,
+                  title: Text(
+                    "SymMusic",
+                    style: TextStyle(
+                      color: Color(0xFF274D85),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  bottom: TabBar(
+                    indicatorColor: Color(0xFFD9EAF1),
+                    labelColor: Color(0xFF274D85),
+                    unselectedLabelColor: Color(0xFF274D85).withOpacity(0.6),
+                    indicatorWeight: 1.0,
+                    tabs: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "HOT",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "NEW",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "POP",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        size: 35,
+                        color: Color(0xFF274D85),
+                      ),
+                      tooltip: 'Search',
+                      onPressed: () => debugPrint('search button is pressed'),
+                    )
+                  ],
                 ),
-                Tab(
-                  text: 'POP SONGS',
+                body: TabBarView(
+                  key: UniqueKey(),
+                  physics: BouncingScrollPhysics(),
+                  children: <Widget>[HomeMusic(0), HomeMusic(1), HomeMusic(2)],
                 ),
-              ],
+              ),
             ),
           ),
-          body: Stack(
-            alignment: Alignment.bottomCenter,
-            children: <Widget>[
-              TabBarView(
-                children: <Widget>[HomeMusic(0), HomeMusic(1), HomeMusic(2)],
-              ),
-              Positioned(
-                child: GestureDetector(
-                  child: bottombar(),
-                  onTap: () => Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => player())),
-                ),
-              )
-            ],
-          )),
-    );
+        ));
   }
 }
+
+//class HomePager extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    // TODO: implement build
+//    return DefaultTabController(
+//      length: 3,
+//      child: Scaffold(
+////          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+////          floatingActionButton: FloatingActionButton(
+////            onPressed: () => Navigator.of(context)
+////                .push(MaterialPageRoute(builder: (context) => SecondPage())),
+////            child: Icon(Icons.file_download),
+////          ),
+//          drawer: DrawerDemo(),
+//          appBar: AppBar(
+//            title: Text("SyhMusic"),
+//            elevation: 4.0,
+//            actions: <Widget>[
+//              IconButton(
+//                icon: Icon(
+//                  Icons.search,
+//                ),
+//                tooltip: 'Search',
+//                onPressed: () => debugPrint('search button is pressed'),
+//              )
+//            ],
+//            bottom: TabBar(
+//              indicatorColor: Color(0xFFD9EAF1),
+//              labelColor: Color(0xFF274D85),
+//              unselectedLabelColor: Color(0xFF274D85).withOpacity(0.6),
+//              indicatorWeight: 1.0,
+//              tabs: <Widget>[
+//                Tab(
+//                  text: 'HOT SONGS',
+//                ),
+//                Tab(
+//                  text: 'NEW SONGS',
+//                ),
+//                Tab(
+//                  text: 'POP SONGS',
+//                ),
+//              ],
+//            ),
+//          ),
+//          body: Stack(
+//            alignment: Alignment.bottomCenter,
+//            children: <Widget>[
+//              TabBarView(
+//                children: <Widget>[HomeMusic(0), HomeMusic(1), HomeMusic(2)],
+//              ),
+//              Positioned(
+//                child: GestureDetector(
+//                  child: bottombar(),
+//                  onTap: () => Navigator.of(context)
+//                      .push(MaterialPageRoute(builder: (context) => player())),
+//                ),
+//              )
+//            ],
+//          )),
+//    );
+//  }
+//}
