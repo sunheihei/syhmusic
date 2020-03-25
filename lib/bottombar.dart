@@ -23,9 +23,9 @@ class BottomState extends State<bottombar> {
     return Container(
         height: double.infinity,
         child:
-            Consumer<cursongmodel>(builder: (context, cursongmodel cursong, _) {
-          if (cursong.value != null) {
-            mcursong = true;
+            Consumer<CursongModel>(builder: (context, CursongModel cursong, _) {
+          if (cursong.getcursong != null) {
+              mcursong = true;
           }
           return Container(
             height: 56,
@@ -37,7 +37,7 @@ class BottomState extends State<bottombar> {
                     topLeft: Radius.circular(25.0),
                   ),
                   child: Image.network(
-                      mcursong ? cursong.value.albumImage : "dsadasdasd"),
+                      mcursong ? cursong.getcursong.albumImage : "dsadasdasd"),
                 ),
                 Expanded(
                     child: Container(
@@ -47,7 +47,7 @@ class BottomState extends State<bottombar> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        mcursong ? cursong.value.albumName : "Song name",
+                        mcursong ? cursong.getcursong.albumName : "Song name",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -59,7 +59,7 @@ class BottomState extends State<bottombar> {
                         height: 6.0,
                       ),
                       Text(
-                        mcursong ? cursong.value.artistName : "Song singer",
+                        mcursong ? cursong.getcursong.artistName : "Song singer",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
+import 'package:syhmusic/viewmodel/durationmodel.dart';
+import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
+import 'package:syhmusic/viewmodel/playmanager.dart';
 
 import 'drawerdemo.dart';
 import 'player.dart';
 import 'viewmodel/cursongmodel.dart';
 
-final curmusic = cursongmodel();
+//final curmusic = cursongmodel();
+//final playstate = playcontrolmodel();
+
+
 
 void main() {
   runApp(MultiProvider(
 //    providers: [ChangeNotifierProvider.value(value: curmusic)],
     providers: [
-      ChangeNotifierProvider(create: (_) => cursongmodel()),
+      ChangeNotifierProvider(create: (_) => CursongModel()),
+      Provider(create: (_) => AudioPlayer()),
+//      ChangeNotifierProvider(create: (_) => PlayControlModel()),
+//      ChangeNotifierProvider(create: (_) => DurtionModel()),
     ],
     child: MyApp(),
   ));

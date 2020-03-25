@@ -29,10 +29,10 @@ class _playerState extends State<player> {
               ),
               onPressed: () => widget._controller.close(),
             ),
-            Consumer<cursongmodel>(
-              builder: (context, cursongmodel cursong, _) {
+            Consumer<CursongModel>(
+              builder: (context, CursongModel cursong, _) {
                 return Text(
-                  cursong.value != null ? cursong.value.albumName : "SyhMusic",
+                  cursong.getcursong != null ? cursong.getcursong.albumName : "SyhMusic",
                   style: TextStyle(color: Colors.black38, fontSize: 24),
                 );
               },
@@ -45,14 +45,14 @@ class _playerState extends State<player> {
         children: <Widget>[
           Expanded(
             child: Center(
-              child: Consumer<cursongmodel>(
-                builder: (context, cursongmodel cursong, _) {
+              child: Consumer<CursongModel>(
+                builder: (context, CursongModel cursong, _) {
                   return Container(
                     child: ClipOval(
                       clipBehavior: Clip.antiAliasWithSaveLayer,
                       child: Image.network(
-                        cursong.value != null
-                            ? cursong.value.albumImage
+                        cursong.getcursong != null
+                            ? cursong.getcursong.albumImage
                             : "null",
                         height: 300,
                         width: 300,

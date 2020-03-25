@@ -5,9 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:syhmusic/module/song.dart';
 import 'package:syhmusic/viewmodel/cursongmodel.dart';
+import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
 
 Dio dio = Dio();
 
@@ -55,7 +57,6 @@ class HomeMusicState extends State<HomeMusic>
   void dispose() {
     super.dispose();
     // 这里不要忘了将监听移除
-    _scrollController.dispose();
     _streamController.close();
   }
 
@@ -65,15 +66,15 @@ class HomeMusicState extends State<HomeMusic>
     switch (widget.type) {
       case 0:
         url =
-        "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=popularity_total&offset=0";
+            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=popularity_total&offset=0";
         break;
       case 1:
         url =
-        "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=downloads_total&offset=0";
+            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=downloads_total&offset=0";
         break;
       case 2:
         url =
-        "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=listens_total&offset=0";
+            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=listens_total&offset=0";
         break;
     }
 
@@ -104,6 +105,7 @@ class HomeMusicState extends State<HomeMusic>
   }
 
   Widget buildListView(BuildContext context, List<Results> list) {
+    AudioPlayer _player = Provider.of<AudioPlayer>(context);
     return ListView.builder(
       itemBuilder: (context, index) {
         if (index == list.length) {
@@ -120,11 +122,13 @@ class HomeMusicState extends State<HomeMusic>
           );
         }
         Results bean = list[index];
-        return Consumer<cursongmodel>(
-            builder: (context, cursongmodel cursong, _) =>
+        return Consumer2(
+            builder: (context, CursongModel cursong, AudioPlayer audioPlayer,
+                    _) =>
                 GestureDetector(
                   onTap: () {
-                    cursong.setCurSong(bean);
+                    cursong.setCurListSong(list, index);
+                    audioPlayer.setUrl(bean.audiodownload);
                   },
                   child: Container(
                       height: 80,
@@ -136,41 +140,40 @@ class HomeMusicState extends State<HomeMusic>
                           children: <Widget>[
                             ClipRRect(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0)),
+                                  BorderRadius.all(Radius.circular(10.0)),
                               child: Image.network(bean.albumImage),
                             ),
                             Expanded(
                                 child: Container(
-                                  margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        bean.albumName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Color(0xFF274D85),
-                                          fontSize: 24.0,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 6.0,
-                                      ),
-                                      Text(
-                                        bean.artistName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF274D85),
-                                        ),
-                                      )
-                                    ],
+                              margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    bean.albumName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Color(0xFF274D85),
+                                      fontSize: 24.0,
+                                    ),
                                   ),
-                                )),
+                                  SizedBox(
+                                    height: 6.0,
+                                  ),
+                                  Text(
+                                    bean.artistName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Color(0xFF274D85),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )),
                             IconButton(
                                 icon: Icon(
                                   Icons.more_vert,
@@ -181,20 +184,7 @@ class HomeMusicState extends State<HomeMusic>
                           ],
                         ),
                       )),
-                )
-//                ListTile(
-//                  title: Text(bean.albumName),
-//                  subtitle: Text(bean.artistName, maxLines: 1),
-//                  leading: new Image.network(bean.albumImage),
-//                  trailing: IconButton(
-//                    icon: Icon(Icons.more_vert),
-////                    onPressed:() { /* Your code */ },
-////                  ),
-//                  onTap: () {
-//                    cursong.setCurSong(bean);
-//                  },
-//                )
-        );
+                ));
       },
       itemCount: list.length + 1,
       controller: _scrollController,
@@ -205,3 +195,5 @@ class HomeMusicState extends State<HomeMusic>
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
+
+//

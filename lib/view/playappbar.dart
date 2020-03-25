@@ -21,10 +21,10 @@ class _playappbarState extends State<playappbar> {
               ),
               onPressed: () => Navigator.pop(context),
             ),
-            Consumer<cursongmodel>(
-              builder: (context, cursongmodel cursong, _) {
+            Consumer<CursongModel>(
+              builder: (context, CursongModel cursong, _) {
                 return Text(
-                  cursong.value != null ? cursong.value.albumName : "SyhMusic",
+                  cursong.getcursong != null ? cursong.getcursong.albumName : "SyhMusic",
                   style: TextStyle(color: Colors.black38,fontSize: 24),
                 );
               },
