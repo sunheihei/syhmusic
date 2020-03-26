@@ -4,6 +4,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/view/baseappbar.dart';
 import 'package:syhmusic/view/playappbar.dart';
 import 'package:syhmusic/viewmodel/cursongmodel.dart';
+import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
 
 class player extends StatefulWidget {
   final PanelController _controller;
@@ -32,7 +33,9 @@ class _playerState extends State<player> {
             Consumer<CursongModel>(
               builder: (context, CursongModel cursong, _) {
                 return Text(
-                  cursong.getcursong != null ? cursong.getcursong.albumName : "SyhMusic",
+                  cursong.getcursong != null
+                      ? cursong.getcursong.albumName
+                      : "SyhMusic",
                   style: TextStyle(color: Colors.black38, fontSize: 24),
                 );
               },
@@ -70,30 +73,34 @@ class _playerState extends State<player> {
             color: Colors.black26,
           ),
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                SizedBox(width: 20),
-                IconButton(
-                    icon: Icon(Icons.replay), onPressed: null, iconSize: 30),
-                IconButton(
-                    icon: Icon(Icons.skip_previous),
-                    onPressed: null,
-                    iconSize: 60),
-                IconButton(
-                    icon: Icon(Icons.play_circle_outline),
-                    onPressed: null,
-                    iconSize: 60),
-                IconButton(
-                    icon: Icon(Icons.skip_next), onPressed: null, iconSize: 60),
-                IconButton(
-                    icon: Icon(Icons.favorite_border),
-                    onPressed: null,
-                    iconSize: 30),
-                SizedBox(width: 20),
-              ],
-            ),
+            child: Consumer(builder: (context, PlayControlModel control, _) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SizedBox(width: 20),
+                  IconButton(
+                      icon: Icon(Icons.replay), onPressed: null, iconSize: 30),
+                  IconButton(
+                      icon: Icon(Icons.skip_previous),
+                      onPressed: null,
+                      iconSize: 60),
+                  IconButton(
+                      icon: Icon(Icons.play_circle_outline),
+                      onPressed: null,
+                      iconSize: 60),
+                  IconButton(
+                      icon: Icon(Icons.skip_next),
+                      onPressed: null,
+                      iconSize: 60),
+                  IconButton(
+                      icon: Icon(Icons.favorite_border),
+                      onPressed: null,
+                      iconSize: 30),
+                  SizedBox(width: 20),
+                ],
+              );
+            }),
             flex: 1,
           ),
         ],

@@ -20,4 +20,10 @@ class CursongModel with ChangeNotifier {
     _mcurpositon = position;
     notifyListeners();
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 }

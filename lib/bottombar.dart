@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/viewmodel/cursongmodel.dart';
 
+import 'viewmodel/durationmodel.dart';
+import 'viewmodel/playcontrolmodel.dart';
+
 class bottombar extends StatefulWidget {
   final PanelController _controller;
 
@@ -25,7 +28,7 @@ class BottomState extends State<bottombar> {
         child:
             Consumer<CursongModel>(builder: (context, CursongModel cursong, _) {
           if (cursong.getcursong != null) {
-              mcursong = true;
+            mcursong = true;
           }
           return Container(
             height: 56,
@@ -59,7 +62,9 @@ class BottomState extends State<bottombar> {
                         height: 6.0,
                       ),
                       Text(
-                        mcursong ? cursong.getcursong.artistName : "Song singer",
+                        mcursong
+                            ? cursong.getcursong.artistName
+                            : "Song singer",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -70,13 +75,54 @@ class BottomState extends State<bottombar> {
                     ],
                   ),
                 )),
-                IconButton(
-                  icon: Icon(
-                    Icons.play_circle_outline,
-                    color: Colors.white,
-                  ),
-                  onPressed: null,
-                  iconSize: 60,
+                Consumer(builder: (context, PlayControlModel control, _) {
+                  if (control.states == AudioPlayState.paused ||
+                      control.states == AudioPlayState.stopped) {
+                    return IconButton(
+                      icon: Icon(
+                        Icons.play_circle_outline,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        control.play();
+                      },
+                      iconSize: 60,
+                    );
+                  } else if (control.states == AudioPlayState.playing) {
+                    return IconButton(
+                      icon: Icon(
+                        Icons.pause_circle_outline,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        control.pause();
+                      },
+                      iconSize: 60,
+                    );
+                  } else if (control.states == AudioPlayState.buffering) {
+                    return Container(
+                      margin: EdgeInsets.all(12.0),
+                      height: 45,
+                      width: 45,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 5.0,
+                          valueColor: AlwaysStoppedAnimation(Colors.white)),
+                    );
+                  }
+                  return IconButton(
+                    icon: Icon(
+                      Icons.play_circle_outline,
+                      color: Colors.white,
+                    ),
+                    onPressed: null,
+                    iconSize: 60,
+                  );
+                }),
+                Consumer(
+                  builder: (context, DurtionModel durtionmodel, _) {
+//                    print('durtionmodel ${durtionmodel.position}');
+                    return Container();
+                  },
                 )
               ],
             ),

@@ -4,39 +4,30 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
-import 'package:syhmusic/viewmodel/durationmodel.dart';
-import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
-import 'package:syhmusic/viewmodel/playmanager.dart';
 
 import 'drawerdemo.dart';
 import 'player.dart';
 import 'viewmodel/cursongmodel.dart';
+import 'viewmodel/durationmodel.dart';
+import 'viewmodel/playcontrolmodel.dart';
 
-//final curmusic = cursongmodel();
-//final playstate = playcontrolmodel();
-
-
-
-void main() {
-  runApp(MultiProvider(
-//    providers: [ChangeNotifierProvider.value(value: curmusic)],
-    providers: [
-      ChangeNotifierProvider(create: (_) => CursongModel()),
-      Provider(create: (_) => AudioPlayer()),
-//      ChangeNotifierProvider(create: (_) => PlayControlModel()),
-//      ChangeNotifierProvider(create: (_) => DurtionModel()),
-    ],
-    child: MyApp(),
-  ));
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'syhmusic',
-        home: SafeArea(child: HomePagers()));
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CursongModel()),
+        ChangeNotifierProvider(create: (_) => DurtionModel()),
+        ChangeNotifierProvider(create: (_) => PlayControlModel()),
+
+      ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'syhmusic',
+          home: SafeArea(child: HomePagers())),
+    );
   }
 }
 

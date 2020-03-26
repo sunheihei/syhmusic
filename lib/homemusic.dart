@@ -9,7 +9,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:syhmusic/module/song.dart';
 import 'package:syhmusic/viewmodel/cursongmodel.dart';
-import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
+
+import 'viewmodel/playcontrolmodel.dart';
 
 Dio dio = Dio();
 
@@ -105,7 +106,6 @@ class HomeMusicState extends State<HomeMusic>
   }
 
   Widget buildListView(BuildContext context, List<Results> list) {
-    AudioPlayer _player = Provider.of<AudioPlayer>(context);
     return ListView.builder(
       itemBuilder: (context, index) {
         if (index == list.length) {
@@ -123,12 +123,12 @@ class HomeMusicState extends State<HomeMusic>
         }
         Results bean = list[index];
         return Consumer2(
-            builder: (context, CursongModel cursong, AudioPlayer audioPlayer,
+            builder: (context, CursongModel cursong, PlayControlModel control,
                     _) =>
                 GestureDetector(
                   onTap: () {
                     cursong.setCurListSong(list, index);
-                    audioPlayer.setUrl(bean.audiodownload);
+                    control.seturl(bean.audiodownload);
                   },
                   child: Container(
                       height: 80,

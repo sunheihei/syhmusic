@@ -1,38 +1,37 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:syhmusic/viewmodel/playmanager.dart';
 
-
 class DurtionModel with ChangeNotifier {
+
   AudioPlayer _player;
-  playcontrolmodel() {
+  Duration duration;
+  Duration position;
+
+  DurtionModel() {
     _player = PlayManager.instance;
-//    _player.fullPlaybackStateStream.listen(onState);
     _player.durationStream.listen(onDuration);
     _player.getPositionStream().listen(onPositon);
   }
 
-//  void SetUrl(String url) {
-//    _player.setUrl(url);
-//  }
-//
-//  void onState(FullAudioPlaybackState event) {
-//    AudioPlaybackState state = event.state;
-//    bool buffering = event.buffering;
-//    print('${event.state}');
-//    print('${event.buffering}');
-//
-//    if (state == AudioPlaybackState.connecting || buffering == true) {
-//
-//    }
-//  }
-
   void onDuration(Duration event) {
-    print('onDuration :${event.inMinutes}');
-    print('onDuration :${event.inSeconds}');
+    print('onDuration :${event}');
+    duration = event;
+    notifyListeners();
   }
 
   void onPositon(Duration event) {
-    print('onPositon:${event.inMilliseconds}');
+    print('onPositon:${event.inSeconds}');
+    position = event;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 }
