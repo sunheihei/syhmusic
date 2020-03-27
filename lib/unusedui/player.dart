@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:syhmusic/view/baseappbar.dart';
-import 'package:syhmusic/view/playappbar.dart';
+import 'package:syhmusic/unusedui/baseappbar.dart';
+import 'package:syhmusic/unusedui/playappbar.dart';
 import 'package:syhmusic/viewmodel/cursongmodel.dart';
 import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
 
@@ -73,32 +73,55 @@ class _playerState extends State<player> {
             color: Colors.black26,
           ),
           Expanded(
-            child: Consumer(builder: (context, PlayControlModel control, _) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  SizedBox(width: 20),
-                  IconButton(
-                      icon: Icon(Icons.replay), onPressed: null, iconSize: 30),
-                  IconButton(
-                      icon: Icon(Icons.skip_previous),
-                      onPressed: null,
-                      iconSize: 60),
-                  IconButton(
-                      icon: Icon(Icons.play_circle_outline),
-                      onPressed: null,
-                      iconSize: 60),
-                  IconButton(
-                      icon: Icon(Icons.skip_next),
-                      onPressed: null,
-                      iconSize: 60),
-                  IconButton(
-                      icon: Icon(Icons.favorite_border),
-                      onPressed: null,
-                      iconSize: 30),
-                  SizedBox(width: 20),
-                ],
+            child: Consumer2(builder:
+                (context, PlayControlModel control, CursongModel cursong, _) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25.0),
+                    topRight: Radius.circular(25.0),
+                  ),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: [
+                      0.0,
+                      0.7,
+                    ],
+                    colors: [
+                      Color(0xFF47ACE1),
+                      Color(0xFFDF5F9D),
+                    ],
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    SizedBox(width: 20),
+                    IconButton(
+                        icon: Icon(Icons.replay),
+                        onPressed: null,
+                        iconSize: 30),
+                    IconButton(
+                        icon: Icon(Icons.skip_previous),
+                        onPressed: () {},
+                        iconSize: 60),
+                    IconButton(
+                        icon: Icon(Icons.play_circle_outline),
+                        onPressed: null,
+                        iconSize: 60),
+                    IconButton(
+                        icon: Icon(Icons.skip_next),
+                        onPressed: null,
+                        iconSize: 60),
+                    IconButton(
+                        icon: Icon(Icons.favorite_border),
+                        onPressed: null,
+                        iconSize: 30),
+                    SizedBox(width: 20),
+                  ],
+                ),
               );
             }),
             flex: 1,

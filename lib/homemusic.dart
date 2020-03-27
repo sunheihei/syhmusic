@@ -67,15 +67,15 @@ class HomeMusicState extends State<HomeMusic>
     switch (widget.type) {
       case 0:
         url =
-            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=popularity_total&offset=0";
+            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=16c28430&order=popularity_total&offset=0";
         break;
       case 1:
         url =
-            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=downloads_total&offset=0";
+            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=16c28430&order=downloads_total&offset=0";
         break;
       case 2:
         url =
-            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=97dab294&order=listens_total&offset=0";
+            "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&type=single+albumtrack&client_id=16c28430&order=listens_total&offset=0";
         break;
     }
 
@@ -122,12 +122,12 @@ class HomeMusicState extends State<HomeMusic>
           );
         }
         Results bean = list[index];
-        return Consumer2(
-            builder: (context, CursongModel cursong, PlayControlModel control,
+        return Consumer(
+            builder: (context ,PlayControlModel control,
                     _) =>
                 GestureDetector(
                   onTap: () {
-                    cursong.setCurListSong(list, index);
+                    control.setCurListSong(list, index);
                     control.seturl(bean.audiodownload);
                   },
                   child: Container(

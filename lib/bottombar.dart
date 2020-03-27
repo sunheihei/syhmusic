@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:syhmusic/view/seekbar.dart';
 import 'package:syhmusic/viewmodel/cursongmodel.dart';
 
 import 'viewmodel/durationmodel.dart';
@@ -26,12 +27,11 @@ class BottomState extends State<bottombar> {
     return Container(
         height: double.infinity,
         child:
-            Consumer<CursongModel>(builder: (context, CursongModel cursong, _) {
-          if (cursong.getcursong != null) {
+            Consumer(builder: (context, PlayControlModel control, _) {
+          if (control.getcursong != null) {
             mcursong = true;
           }
           return Container(
-            height: 56,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -40,97 +40,121 @@ class BottomState extends State<bottombar> {
                     topLeft: Radius.circular(25.0),
                   ),
                   child: Image.network(
-                      mcursong ? cursong.getcursong.albumImage : "dsadasdasd"),
+                      mcursong ? control.getcursong.albumImage : "dsadasdasd"),
                 ),
                 Expanded(
-                    child: Container(
-                  margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        mcursong ? cursong.getcursong.albumName : "Song name",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28.0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  mcursong
+                                      ? control.getcursong.albumName
+                                      : "Song name",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 28.0,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 6.0,
+                                ),
+                                Text(
+                                  mcursong
+                                      ? control.getcursong.artistName
+                                      : "Song singer",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 6.0,
-                      ),
-                      Text(
-                        mcursong
-                            ? cursong.getcursong.artistName
-                            : "Song singer",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                )),
-                Consumer(builder: (context, PlayControlModel control, _) {
-                  if (control.states == AudioPlayState.paused ||
-                      control.states == AudioPlayState.stopped) {
-                    return IconButton(
-                      icon: Icon(
-                        Icons.play_circle_outline,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        control.play();
-                      },
-                      iconSize: 60,
-                    );
-                  } else if (control.states == AudioPlayState.playing) {
-                    return IconButton(
-                      icon: Icon(
-                        Icons.pause_circle_outline,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        control.pause();
-                      },
-                      iconSize: 60,
-                    );
-                  } else if (control.states == AudioPlayState.buffering) {
-                    return Container(
-                      margin: EdgeInsets.all(12.0),
-                      height: 45,
-                      width: 45,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 5.0,
-                          valueColor: AlwaysStoppedAnimation(Colors.white)),
-                    );
-                  }
-                  return IconButton(
-                    icon: Icon(
-                      Icons.play_circle_outline,
-                      color: Colors.white,
+                        Consumer(
+                            builder: (context, PlayControlModel control, _) {
+                          if (control.states == AudioPlayState.paused ||
+                              control.states == AudioPlayState.stopped) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.play_circle_outline,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                control.play();
+                              },
+                              iconSize: 60,
+                            );
+                          } else if (control.states == AudioPlayState.playing) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.pause_circle_outline,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                control.pause();
+                              },
+                              iconSize: 60,
+                            );
+                          } else if (control.states ==
+                              AudioPlayState.buffering) {
+                            return Container(
+                              margin: EdgeInsets.all(12.0),
+                              height: 45,
+                              width: 45,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 5.0,
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.white)),
+                            );
+                          }
+                          return IconButton(
+                            icon: Icon(
+                              Icons.play_circle_outline,
+                              color: Colors.white,
+                            ),
+                            onPressed: null,
+                            iconSize: 60,
+                          );
+                        }),
+                      ],
                     ),
-                    onPressed: null,
-                    iconSize: 60,
-                  );
-                }),
-                Consumer(
-                  builder: (context, DurtionModel durtionmodel, _) {
-//                    print('durtionmodel ${durtionmodel.position}');
-                    return Container();
-                  },
-                )
+                    Consumer2(builder: (context, DurtionModel durtion,
+                        PlayControlModel _player, _) {
+                      final duration = durtion.duration ?? Duration.zero;
+                      var position = durtion.position ?? Duration.zero;
+
+                      return Container(
+                        height: 20,
+                        width: double.infinity,
+                        child: SeekBar(
+                            onChangeEnd: (newPosition) {
+                              _player.seekto(newPosition);
+                            },
+                            duration: duration,
+                            position: position),
+                      );
+                    })
+                  ],
+                )),
               ],
             ),
           );
-        }
-//        builder: (context,CurSongModel cursong, _)=>Text(
-//            cursong.value.albumName.toString()
-//        )
-                ));
+        }));
   }
 }

@@ -6,7 +6,9 @@ import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
 
 import 'drawerdemo.dart';
-import 'player.dart';
+import 'favorites.dart';
+import 'unusedui/player.dart';
+import 'ui/now_playing_screen.dart';
 import 'viewmodel/cursongmodel.dart';
 import 'viewmodel/durationmodel.dart';
 import 'viewmodel/playcontrolmodel.dart';
@@ -19,9 +21,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CursongModel()),
-        ChangeNotifierProvider(create: (_) => DurtionModel()),
         ChangeNotifierProvider(create: (_) => PlayControlModel()),
-
+        ChangeNotifierProvider(create: (_) => DurtionModel()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -68,7 +69,7 @@ class _HomePagersState extends State<HomePagers> {
                 topLeft: Radius.circular(_radius),
                 topRight: Radius.circular(_radius),
               ),
-              child: player(controller: _panelController),
+              child: NowPlayingScreen(controller: _panelController),
             ),
             controller: _panelController,
             minHeight: 100,
@@ -141,7 +142,7 @@ class _HomePagersState extends State<HomePagers> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
-                          "POP",
+                          "FAVORITES",
                           style: TextStyle(fontSize: 20.0),
                         ),
                       ),
@@ -162,7 +163,7 @@ class _HomePagersState extends State<HomePagers> {
                 body: TabBarView(
                   key: UniqueKey(),
                   physics: BouncingScrollPhysics(),
-                  children: <Widget>[HomeMusic(0), HomeMusic(1), HomeMusic(2)],
+                  children: <Widget>[HomeMusic(0), Favorites(), Favorites()],
                 ),
               ),
             ),
