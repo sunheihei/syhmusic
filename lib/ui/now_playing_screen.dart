@@ -19,6 +19,7 @@ class NowPlayingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool songisnull = false;
     final double _radius = 25.0;
     final double _screenHeight = MediaQuery.of(context).size.height;
     final double _albumArtSize = _screenHeight / 2;
@@ -56,15 +57,40 @@ class NowPlayingScreen extends StatelessWidget {
           ),
           Divider(
             color: Colors.transparent,
-            height: _screenHeight / 15,
+            height: _screenHeight / 22,
           ),
           PreferencesBoard(),
           Divider(
             color: Colors.transparent,
-            height: _screenHeight / 15,
+            height: _screenHeight / 22,
           ),
-          Consumer(
-            builder: (context, PlayControlModel control, _) => Padding(
+          Consumer2(builder:
+              (context, DurtionModel durtion, PlayControlModel _player, _) {
+            final duration = durtion.duration ?? Duration.zero;
+            var position = durtion.position ?? Duration.zero;
+            if (position > duration) {
+              position = duration;
+            }
+            return Container(
+              height: 20,
+              width: double.infinity,
+              child: PlaySeekBar(
+                  onChangeEnd: (newPosition) {
+                    _player.seekto(newPosition);
+                  },
+                  duration: duration,
+                  position: position),
+            );
+          }),
+          Divider(
+            color: Colors.transparent,
+            height: _screenHeight / 22,
+          ),
+          Consumer(builder: (context, PlayControlModel control, _) {
+            if (control.getcursong != null) {
+              songisnull = true;
+            }
+            return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 22.0),
                 child: Row(
                   children: <Widget>[
@@ -75,7 +101,9 @@ class NowPlayingScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            "SongName",
+                            songisnull
+                                ? control.getcursong.artistName
+                                : "Singername",
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFFADB9CD),
@@ -89,7 +117,9 @@ class NowPlayingScreen extends StatelessWidget {
                             color: Colors.transparent,
                           ),
                           Text(
-                            "Singername",
+                            songisnull
+                                ? control.getcursong.albumName
+                                : "Songname",
                             style: TextStyle(
                               fontSize: 30,
                               color: Color(0xFF4D6B9C),
@@ -103,43 +133,37 @@ class NowPlayingScreen extends StatelessWidget {
                     ),
                     Flexible(
                       flex: 2,
-                      child: Text(
-                        "0:00",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFFADB9CD),
-                          letterSpacing: 1,
+                      child: Consumer(
+                        builder: (context, DurtionModel durtion, _) => Text(
+                          durtion.position == null
+                              ? "0:00"
+                              : formate(durtion.position.inSeconds),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFFADB9CD),
+                            letterSpacing: 1,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     )
                   ],
-                )),
-          ),
-          Divider(
-            color: Colors.transparent,
-            height: _screenHeight / 22,
-          ),
-          Consumer2(builder: (context, DurtionModel durtion,
-              PlayControlModel _player, _) {
-            final duration = durtion.duration ?? Duration.zero;
-            var position = durtion.position ?? Duration.zero;
-
-            return Container(
-              height: 20,
-              width: double.infinity,
-              child: SeekBar(
-                  onChangeEnd: (newPosition) {
-                    _player.seekto(newPosition);
-                  },
-                  duration: duration,
-                  position: position),
-            );
-          })
+                ));
+          }),
         ],
       ),
     );
+  }
+
+  String formate(int _temp) {
+    final int _minutes = (_temp / 60).floor();
+    final int _seconds = (((_temp / 60) - _minutes) * 60).round();
+    if (_seconds.toString().length != 1) {
+      return _minutes.toString() + ":" + _seconds.toString();
+    } else {
+      return _minutes.toString() + ":0" + _seconds.toString();
+    }
   }
 }

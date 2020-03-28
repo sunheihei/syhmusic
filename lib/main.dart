@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
+import 'package:syhmusic/viewmodel/spmodel.dart';
 
 import 'drawerdemo.dart';
 import 'favorites.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CursongModel()),
         ChangeNotifierProvider(create: (_) => PlayControlModel()),
         ChangeNotifierProvider(create: (_) => DurtionModel()),
+        ChangeNotifierProvider(create: (_) => SpModel()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

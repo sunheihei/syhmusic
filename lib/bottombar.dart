@@ -138,7 +138,9 @@ class BottomState extends State<bottombar> {
                         PlayControlModel _player, _) {
                       final duration = durtion.duration ?? Duration.zero;
                       var position = durtion.position ?? Duration.zero;
-
+                      if (position > duration) {
+                        position = duration;
+                      }
                       return Container(
                         height: 20,
                         width: double.infinity,

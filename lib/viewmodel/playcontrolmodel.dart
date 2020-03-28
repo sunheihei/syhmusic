@@ -3,6 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:syhmusic/module/song.dart';
 import 'package:syhmusic/viewmodel/cursongmodel.dart';
 import 'package:syhmusic/viewmodel/playmanager.dart';
+import 'package:syhmusic/viewmodel/spmodel.dart';
 
 enum AudioPlayState {
   none,
@@ -18,10 +19,12 @@ class PlayControlModel with ChangeNotifier {
   AudioPlayer _player;
   bool isbuffering;
   AudioPlayState states;
+  SpModel _sp;
 
   PlayControlModel() {
     _player = PlayManager.instance;
     _player.fullPlaybackStateStream.listen(onState);
+    _sp = SpModel();
   }
 
   void seturl(String url) {
@@ -43,7 +46,7 @@ class PlayControlModel with ChangeNotifier {
   void playnext() {
     if (_mcurpositon == _songlist.length - 1 && _songlist.isNotEmpty) {
       _mcurpositon = 0;
-    }else{
+    } else {
       _mcurpositon++;
     }
     _player.setUrl(getcursong.audiodownload);
@@ -88,14 +91,23 @@ class PlayControlModel with ChangeNotifier {
     if (state == AudioPlaybackState.completed) {
       states = AudioPlayState.completed;
       print('completed');
-      notifyListeners();
+//      whichplaynext();
     }
+  }
+
+//  void whichplaynext() {
+//    _sp.getRandom().then((value) {
+//      if (value) {
+//
+//      } else {
+//
+//      }
+//    });
+//  }
 
 //    print('state：${event.state}');
 //    print('buffering：${event.buffering}');
-  }
-
-  //============================================================
+//============================================================
   List<Results> _songlist = new List();
   int _mcurpositon;
 
@@ -120,4 +132,5 @@ class PlayControlModel with ChangeNotifier {
     // TODO: implement dispose
     super.dispose();
   }
+
 }
