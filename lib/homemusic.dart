@@ -39,15 +39,15 @@ class HomeMusicState extends State<HomeMusic>
     // TODO: implement initState
     super.initState();
     _streamController = StreamController.broadcast();
-    _streamController.stream.listen(onData);
+//    _streamController.stream.listen(onData);
     _addDataToStream();
   }
 
-  void onData(List<Results> value) {
-    setState(() {
-      songlist.addAll(value);
-    });
-  }
+//  void onData(List<Results> value) {
+//    setState(() {
+//      songlist.addAll(value);
+//    });
+//  }
 
   void _addDataToStream() async {
     print('Add data to stream.');
@@ -91,16 +91,15 @@ class HomeMusicState extends State<HomeMusic>
     return StreamBuilder(
       stream: _streamController.stream,
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
+        if (!snapshot.hasData) {
           return Container(
             color: Colors.white,
             child: Center(
               child: CircularProgressIndicator(),
             ),
           );
-        } else {
-          return buildListView(context, snapshot.data);
         }
+        return buildListView(context, snapshot.data);
       },
     );
   }

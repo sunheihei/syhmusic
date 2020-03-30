@@ -19,12 +19,16 @@ class PlayControlModel with ChangeNotifier {
   AudioPlayer _player;
   bool isbuffering;
   AudioPlayState states;
+  bool cycle = false;
+  bool shuffle = false;
   SpModel _sp;
 
   PlayControlModel() {
     _player = PlayManager.instance;
     _player.fullPlaybackStateStream.listen(onState);
     _sp = SpModel();
+    //读取保存的播放控制状态
+    updataplaystatus();
   }
 
   void seturl(String url) {
@@ -44,20 +48,31 @@ class PlayControlModel with ChangeNotifier {
   }
 
   void playnext() {
-    if (_mcurpositon == _songlist.length - 1 && _songlist.isNotEmpty) {
+    if (_mcurpositon == _normalsonglist.length - 1 &&
+        _normalsonglist.isNotEmpty) {
       _mcurpositon = 0;
     } else {
       _mcurpositon++;
     }
-    _player.setUrl(getcursong.audiodownload);
+    if (shuffle) {
+      cursong = _shufflesonglist[_mcurpositon];
+    } else {
+      cursong = _normalsonglist[_mcurpositon];
+    }
+    _player.setUrl(cursong.audiodownload);
     notifyListeners();
   }
 
   void playpre() {
-    if (_mcurpositon > 0 && _songlist.isNotEmpty) {
+    if (_mcurpositon > 0 && _normalsonglist.isNotEmpty) {
       _mcurpositon--;
-      _player.setUrl(getcursong.audiodownload);
     }
+    if (shuffle) {
+      cursong = _shufflesonglist[_mcurpositon];
+    } else {
+      cursong = _normalsonglist[_mcurpositon];
+    }
+    _player.setUrl(cursong.audiodownload);
     notifyListeners();
   }
 
@@ -66,7 +81,6 @@ class PlayControlModel with ChangeNotifier {
     bool buffering = event.buffering;
 
     if (state == AudioPlaybackState.connecting || buffering == true) {
-      print('buffering');
       states = AudioPlayState.buffering;
       notifyListeners();
     }
@@ -78,52 +92,56 @@ class PlayControlModel with ChangeNotifier {
 
     if (state == AudioPlaybackState.playing) {
       states = AudioPlayState.playing;
-      print('playing');
       notifyListeners();
     }
 
     if (state == AudioPlaybackState.paused) {
       states = AudioPlayState.paused;
-      print('paused');
       notifyListeners();
     }
 
     if (state == AudioPlaybackState.completed) {
       states = AudioPlayState.completed;
-      print('completed');
-//      whichplaynext();
+      if (cycle) {
+        _player.setUrl(cursong.audiodownload);
+      } else {
+        playnext();
+      }
     }
   }
 
-//  void whichplaynext() {
-//    _sp.getRandom().then((value) {
-//      if (value) {
-//
-//      } else {
-//
-//      }
-//    });
-//  }
+  void updataplaystatus() {
+    _sp.getShuffle().then((value) => shuffle = value);
+    _sp.getCycle().then((value) => cycle = value);
+  }
 
 //    print('state：${event.state}');
 //    print('buffering：${event.buffering}');
 //============================================================
-  List<Results> _songlist = new List();
+  List<Results> _normalsonglist = new List();
+  List<Results> _shufflesonglist = new List();
   int _mcurpositon;
+  Results cursong;
 
-  Results get getcursong =>
-      _songlist.isNotEmpty ? _songlist[_mcurpositon] : null;
+  Results get getcursong => songlist.isNotEmpty ? cursong : null;
 
-  List<Results> get songlist => _songlist;
+  List<Results> get songlist => _normalsonglist;
 
   void setCurListSong(List<Results> songlist, int position) {
-    if (_songlist.isEmpty || _songlist.last != songlist.last) {
-      _songlist.clear();
-      _songlist.addAll(songlist);
+    if (_normalsonglist.isEmpty || _normalsonglist.last != songlist.last) {
+      _normalsonglist.clear();
+      _normalsonglist.addAll(songlist);
+      updateshufflesPlaylist(_normalsonglist);
       print("new list");
     }
     _mcurpositon = position;
+    cursong = _normalsonglist[_mcurpositon];
     notifyListeners();
+  }
+
+  void updateshufflesPlaylist(List<Results> normalPlaylist) {
+    _shufflesonglist = []..addAll(normalPlaylist);
+    _shufflesonglist.shuffle();
   }
 
   @override
@@ -132,5 +150,4 @@ class PlayControlModel with ChangeNotifier {
     // TODO: implement dispose
     super.dispose();
   }
-
 }

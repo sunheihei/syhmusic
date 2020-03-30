@@ -23,7 +23,6 @@ class DurtionModel with ChangeNotifier {
   }
 
   void onPositon(Duration event) {
-    print('onPositon:${event.inSeconds}');
     position = event;
     notifyListeners();
   }
