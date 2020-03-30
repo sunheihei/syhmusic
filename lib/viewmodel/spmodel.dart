@@ -1,15 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SpModel with ChangeNotifier {
+
   final String TAG_CYCLE = "cycle";
   final String TAG_RANDOM = "random";
 
-
-
-  Future<void> setCycle(bool cycle) async {
+   Future<void> setCycle(bool cycle) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(TAG_CYCLE, cycle);
+    await prefs.setBool(TAG_CYCLE, cycle);
   }
 
   Future<bool> getCycle() async {
@@ -19,8 +20,7 @@ class SpModel with ChangeNotifier {
 
   Future<void> setRandom(bool random) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(TAG_RANDOM, random);
-    notifyListeners();
+    await prefs.setBool(TAG_RANDOM, random);
   }
 
   Future<bool> getRandom() async {
