@@ -38,15 +38,9 @@ class HomeMusicState extends State<HomeMusic>
     // TODO: implement initState
     super.initState();
     _streamController = StreamController.broadcast();
-//    _streamController.stream.listen(onData);
     _addDataToStream();
   }
 
-//  void onData(List<Results> value) {
-//    setState(() {
-//      songlist.addAll(value);
-//    });
-//  }
 
   void _addDataToStream() async {
     print('Add data to stream.');

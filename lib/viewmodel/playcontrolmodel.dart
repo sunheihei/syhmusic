@@ -114,8 +114,7 @@ class PlayControlModel with ChangeNotifier {
     _sp.getCycle().then((value) => cycle = value);
   }
 
-//    print('state：${event.state}');
-//    print('buffering：${event.buffering}');
+
 //============================================================
   List<Results> _normalsonglist = new List();
   List<Results> _shufflesonglist = new List();
@@ -139,9 +138,12 @@ class PlayControlModel with ChangeNotifier {
   }
 
   void updateshufflesPlaylist(List<Results> normalPlaylist) {
+    _shufflesonglist.clear();
     _shufflesonglist = []..addAll(normalPlaylist);
     _shufflesonglist.shuffle();
   }
+
+
 
   @override
   void dispose() {

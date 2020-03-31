@@ -54,8 +54,9 @@ part 'song.g.dart';
 @JsonSerializable()
   class Results extends Object {
 
+
   @JsonKey(name: 'id')
-  String id;
+  String songid;
 
   @JsonKey(name: 'name')
   String name;
@@ -63,14 +64,8 @@ part 'song.g.dart';
   @JsonKey(name: 'duration')
   int duration;
 
-  @JsonKey(name: 'artist_id')
-  String artistId;
-
   @JsonKey(name: 'artist_name')
   String artistName;
-
-  @JsonKey(name: 'artist_idstr')
-  String artistIdstr;
 
   @JsonKey(name: 'album_name')
   String albumName;
@@ -81,11 +76,6 @@ part 'song.g.dart';
   @JsonKey(name: 'license_ccurl')
   String licenseCcurl;
 
-  @JsonKey(name: 'position')
-  int position;
-
-  @JsonKey(name: 'releasedate')
-  String releasedate;
 
   @JsonKey(name: 'album_image')
   String albumImage;
@@ -96,25 +86,8 @@ part 'song.g.dart';
   @JsonKey(name: 'audiodownload')
   String audiodownload;
 
-  @JsonKey(name: 'prourl')
-  String prourl;
 
-  @JsonKey(name: 'shorturl')
-  String shorturl;
-
-  @JsonKey(name: 'shareurl')
-  String shareurl;
-
-  @JsonKey(name: 'lyrics')
-  String lyrics;
-
-  @JsonKey(name: 'waveform')
-  String waveform;
-
-  @JsonKey(name: 'image')
-  String image;
-
-  Results(this.id,this.name,this.duration,this.artistId,this.artistName,this.artistIdstr,this.albumName,this.albumId,this.licenseCcurl,this.position,this.releasedate,this.albumImage,this.audio,this.audiodownload,this.prourl,this.shorturl,this.shareurl,this.lyrics,this.waveform,this.image,);
+  Results(this.songid,this.name,this.duration,this.artistName,this.albumName,this.albumId,this.licenseCcurl,this.albumImage,this.audio,this.audiodownload);
 
   factory Results.fromJson(Map<String, dynamic> srcJson) => _$ResultsFromJson(srcJson);
 

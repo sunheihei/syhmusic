@@ -163,7 +163,7 @@ class _HomePagersState extends State<HomePagers> {
                 body: TabBarView(
                   key: UniqueKey(),
                   physics: BouncingScrollPhysics(),
-                  children: <Widget>[HomeMusic(0), Favorites(), Favorites()],
+                  children: <Widget>[HomeMusic(0), Container(), Favorites()],
                 ),
               ),
             ),

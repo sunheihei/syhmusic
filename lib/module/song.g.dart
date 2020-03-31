@@ -44,44 +44,24 @@ Results _$ResultsFromJson(Map<String, dynamic> json) {
       json['id'] as String,
       json['name'] as String,
       json['duration'] as int,
-      json['artist_id'] as String,
       json['artist_name'] as String,
-      json['artist_idstr'] as String,
       json['album_name'] as String,
       json['album_id'] as String,
       json['license_ccurl'] as String,
-      json['position'] as int,
-      json['releasedate'] as String,
       json['album_image'] as String,
       json['audio'] as String,
-      json['audiodownload'] as String,
-      json['prourl'] as String,
-      json['shorturl'] as String,
-      json['shareurl'] as String,
-      json['lyrics'] as String,
-      json['waveform'] as String,
-      json['image'] as String);
+      json['audiodownload'] as String);
 }
 
 Map<String, dynamic> _$ResultsToJson(Results instance) => <String, dynamic>{
-      'id': instance.id,
+      'id': instance.songid,
       'name': instance.name,
       'duration': instance.duration,
-      'artist_id': instance.artistId,
       'artist_name': instance.artistName,
-      'artist_idstr': instance.artistIdstr,
       'album_name': instance.albumName,
       'album_id': instance.albumId,
       'license_ccurl': instance.licenseCcurl,
-      'position': instance.position,
-      'releasedate': instance.releasedate,
       'album_image': instance.albumImage,
       'audio': instance.audio,
-      'audiodownload': instance.audiodownload,
-      'prourl': instance.prourl,
-      'shorturl': instance.shorturl,
-      'shareurl': instance.shareurl,
-      'lyrics': instance.lyrics,
-      'waveform': instance.waveform,
-      'image': instance.image
+      'audiodownload': instance.audiodownload
     };
