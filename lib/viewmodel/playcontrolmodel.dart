@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:syhmusic/module/song.dart';
-import 'package:syhmusic/viewmodel/cursongmodel.dart';
 import 'package:syhmusic/viewmodel/playmanager.dart';
 import 'package:syhmusic/viewmodel/spmodel.dart';
 

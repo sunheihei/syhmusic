@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/ui/preferences_board.dart';
 import 'package:syhmusic/view/seekbar.dart';
-import 'package:syhmusic/viewmodel/cursongmodel.dart';
 import 'package:syhmusic/viewmodel/durationmodel.dart';
 import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
 

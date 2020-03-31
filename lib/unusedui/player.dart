@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/unusedui/baseappbar.dart';
-import 'package:syhmusic/unusedui/playappbar.dart';
-import 'package:syhmusic/viewmodel/cursongmodel.dart';
-import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
 
 class player extends StatefulWidget {
   final PanelController _controller;
@@ -30,15 +27,9 @@ class _playerState extends State<player> {
               ),
               onPressed: () => widget._controller.close(),
             ),
-            Consumer<CursongModel>(
-              builder: (context, CursongModel cursong, _) {
-                return Text(
-                  cursong.getcursong != null
-                      ? cursong.getcursong.albumName
-                      : "SyhMusic",
-                  style: TextStyle(color: Colors.black38, fontSize: 24),
-                );
-              },
+            Text(
+              "SyhMusic",
+              style: TextStyle(color: Colors.black38, fontSize: 24),
             ),
           ],
         )),
@@ -48,23 +39,17 @@ class _playerState extends State<player> {
         children: <Widget>[
           Expanded(
             child: Center(
-              child: Consumer<CursongModel>(
-                builder: (context, CursongModel cursong, _) {
-                  return Container(
+              child: Container(
                     child: ClipOval(
                       clipBehavior: Clip.antiAliasWithSaveLayer,
                       child: Image.network(
-                        cursong.getcursong != null
-                            ? cursong.getcursong.albumImage
-                            : "null",
+                        "null",
                         height: 300,
                         width: 300,
                         fit: BoxFit.fill,
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
             ),
             flex: 3,
           ),
@@ -73,9 +58,7 @@ class _playerState extends State<player> {
             color: Colors.black26,
           ),
           Expanded(
-            child: Consumer2(builder:
-                (context, PlayControlModel control, CursongModel cursong, _) {
-              return Container(
+            child:  Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25.0),
@@ -122,8 +105,7 @@ class _playerState extends State<player> {
                     SizedBox(width: 20),
                   ],
                 ),
-              );
-            }),
+              ),
             flex: 1,
           ),
         ],

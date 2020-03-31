@@ -6,11 +6,10 @@ import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
 import 'package:syhmusic/viewmodel/spmodel.dart';
 
-import 'drawerdemo.dart';
+import 'unusedui/drawerdemo.dart';
 import 'favorites.dart';
 import 'unusedui/player.dart';
 import 'ui/now_playing_screen.dart';
-import 'viewmodel/cursongmodel.dart';
 import 'viewmodel/durationmodel.dart';
 import 'viewmodel/playcontrolmodel.dart';
 
@@ -21,7 +20,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CursongModel()),
         ChangeNotifierProvider(create: (_) => PlayControlModel()),
         ChangeNotifierProvider(create: (_) => DurtionModel()),
         ChangeNotifierProvider(create: (_) => SpModel()),

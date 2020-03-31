@@ -8,7 +8,6 @@ import 'package:flutter/widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:syhmusic/module/song.dart';
-import 'package:syhmusic/viewmodel/cursongmodel.dart';
 
 import 'viewmodel/playcontrolmodel.dart';
 

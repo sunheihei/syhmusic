@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/view/seekbar.dart';
-import 'package:syhmusic/viewmodel/cursongmodel.dart';
 
 import 'viewmodel/durationmodel.dart';
 import 'viewmodel/playcontrolmodel.dart';
