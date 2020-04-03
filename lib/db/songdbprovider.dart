@@ -7,7 +7,6 @@ class SongDbProvider extends BaseDbProvider {
   ///表名
   final String name = 'FavSongInfo';
 
-
   final String columnsongid = "id";
   final String columnname = "name";
   final String columnduration = "duration";
@@ -56,25 +55,28 @@ class SongDbProvider extends BaseDbProvider {
       columnaudio: song.audio,
       columnaudiodownload: song.audiodownload,
     };
-
     return map;
   }
 
   ///查询数据库
-  Future _getPersonProvider(Database db, String songid) async {
-    List<Map<String, dynamic>> maps =
+//  Future getPersonProvider(Database db, String songid) async {
+//    List<Map<String, dynamic>> list =
+//        await db.rawQuery("select * from $name where $columnsongid = $songid");
+//    return list;
+//  }
+
+  Future getCurSongProvider(Database db, String songid) async {
+    List<Map<String, dynamic>> list =
         await db.rawQuery("select * from $name where $columnsongid = $songid");
-    return maps;
+    return list;
   }
 
   ///插入到数据库
-  Future<int>insert(Results song) async {
-    Database db = await getDataBase();
+  Future<int> insert(Database db ,Results song) async {
     return await db.insert(name, toMap(song));
   }
 
-  Future delete(Results song) async {
-    Database db = await getDataBase();
+  Future delete(Database db,Results song) async {
     await db.delete(name, where: "$columnsongid = ?", whereArgs: [song.songid]);
   }
 
@@ -92,5 +94,3 @@ class SongDbProvider extends BaseDbProvider {
     return null;
   }
 }
-
-

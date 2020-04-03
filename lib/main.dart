@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
+import 'package:syhmusic/viewmodel/dbmodel.dart';
 import 'package:syhmusic/viewmodel/spmodel.dart';
 
 import 'unusedui/drawerdemo.dart';
@@ -20,9 +21,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PlayControlModel()),
-        ChangeNotifierProvider(create: (_) => DurtionModel()),
         ChangeNotifierProvider(create: (_) => SpModel()),
+        ChangeNotifierProvider(create: (_) => DurtionModel()),
+        ChangeNotifierProvider(create: (_) => DBModel()),
+        ChangeNotifierProxyProvider<SpModel, PlayControlModel>(
+          create: (context) => PlayControlModel(),
+          update: (context, spmodel, control) {
+            control.spmodel = spmodel;
+            return control;
+          },
+        )
+
+//        ChangeNotifierProvider(create: (_) => PlayControlModel()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -156,7 +166,7 @@ class _HomePagersState extends State<HomePagers> {
                         color: Color(0xFF274D85),
                       ),
                       tooltip: 'Search',
-                      onPressed: () => debugPrint('search button is pressed'),
+                      onPressed: () => print('search button is pressed'),
                     )
                   ],
                 ),

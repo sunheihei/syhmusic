@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:syhmusic/module/song.dart';
-import 'package:syhmusic/viewmodel/playmanager.dart';
+import 'package:syhmusic/playmanager.dart';
 import 'package:syhmusic/viewmodel/spmodel.dart';
 
 enum AudioPlayState {
@@ -18,16 +18,11 @@ class PlayControlModel with ChangeNotifier {
   AudioPlayer _player;
   bool isbuffering;
   AudioPlayState states;
-  bool cycle = false;
-  bool shuffle = false;
   SpModel _sp;
 
   PlayControlModel() {
     _player = PlayManager.instance;
     _player.fullPlaybackStateStream.listen(onState);
-    _sp = SpModel();
-    //读取保存的播放控制状态
-    updataplaystatus();
   }
 
   void seturl(String url) {
@@ -53,7 +48,7 @@ class PlayControlModel with ChangeNotifier {
     } else {
       _mcurpositon++;
     }
-    if (shuffle) {
+    if (_sp.shuffle) {
       cursong = _shufflesonglist[_mcurpositon];
     } else {
       cursong = _normalsonglist[_mcurpositon];
@@ -66,7 +61,7 @@ class PlayControlModel with ChangeNotifier {
     if (_mcurpositon > 0 && _normalsonglist.isNotEmpty) {
       _mcurpositon--;
     }
-    if (shuffle) {
+    if (_sp.shuffle) {
       cursong = _shufflesonglist[_mcurpositon];
     } else {
       cursong = _normalsonglist[_mcurpositon];
@@ -101,7 +96,7 @@ class PlayControlModel with ChangeNotifier {
 
     if (state == AudioPlaybackState.completed) {
       states = AudioPlayState.completed;
-      if (cycle) {
+      if (_sp.cycle) {
         _player.setUrl(cursong.audiodownload);
       } else {
         playnext();
@@ -109,9 +104,8 @@ class PlayControlModel with ChangeNotifier {
     }
   }
 
-  void updataplaystatus() {
-    _sp.getShuffle().then((value) => shuffle = value);
-    _sp.getCycle().then((value) => cycle = value);
+  set spmodel(SpModel spModel) {
+    _sp = spModel;
   }
 
 
@@ -142,8 +136,6 @@ class PlayControlModel with ChangeNotifier {
     _shufflesonglist = []..addAll(normalPlaylist);
     _shufflesonglist.shuffle();
   }
-
-
 
   @override
   void dispose() {
