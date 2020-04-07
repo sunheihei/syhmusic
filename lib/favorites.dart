@@ -5,6 +5,7 @@ import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
 
 import 'db/songdbprovider.dart';
 import 'module/song.dart';
+import 'viewmodel/dbmodel.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class Favorites extends StatefulWidget {
 
 class _FavoritesState extends State<Favorites> {
   StreamController<List<Results>> _streamController;
+  List<Results> _Favlist;
 
   @override
   void initState() {
@@ -29,7 +31,6 @@ class _FavoritesState extends State<Favorites> {
   }
 
   void _getFavSong() async {
-    print('Add data to stream.');
     SongDbProvider db = new SongDbProvider();
     _streamController.sink.add(await db.getFavSongList());
   }
@@ -47,12 +48,13 @@ class _FavoritesState extends State<Favorites> {
                 child: Center(
                   child: Text(
                     "No Favroite Songs",
-                    style: TextStyle(fontSize: 28, color: Color(0xFF274D85)),
+                    style: TextStyle(fontSize: 24, color: Color(0xFF274D85)),
                   ),
                 ),
               );
             }
-            return buildListView(context, snapshot.data);
+            _Favlist = snapshot.data;
+            return buildListView(context, _Favlist);
           },
         ),
       ),
@@ -76,66 +78,89 @@ class _FavoritesState extends State<Favorites> {
 //          );
 //        }
         Results bean = list[index];
-        return Consumer(
-            builder: (context, PlayControlModel control, _) => GestureDetector(
-                  onTap: () {
-                    control.setCurListSong(list, index);
-                    control.seturl(bean.audiodownload);
+        return Consumer2(
+            builder: (context, PlayControlModel control, DBModel db, _) =>
+                Dismissible(
+                  key: Key('key${index}'),
+                  onDismissed: (direction) {
+                    //删除数据库当前数据
+                    db.deleteFav(bean);
+                    //刷新当前列表展示
+                    setState(() {
+                      _Favlist.removeAt(index);
+                    });
                   },
-                  child: Container(
-                      height: 80,
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                              child: Image.network(bean.albumImage),
-                            ),
-                            Expanded(
-                                child: Container(
-                              margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    bean.albumName,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Color(0xFF274D85),
-                                      fontSize: 24.0,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 6.0,
-                                  ),
-                                  Text(
-                                    bean.artistName,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color(0xFF274D85),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
-                            IconButton(
-                                icon: Icon(
-                                  Icons.favorite,
-                                  color: Color(0xFF274D85),
-                                  size: 32,
-                                ),
-                                onPressed: null)
-                          ],
+                  background: Container(
+                      color: Colors.red,
+                      // 这里使用 ListTile 因为可以快速设置左右两端的Icon
+                      child: Center(
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
                         ),
                       )),
+                  child: GestureDetector(
+                    onTap: () {
+                      control.setCurListSong(list, index);
+                      control.seturl(bean.audiodownload);
+                    },
+                    child: Container(
+                        height: 80,
+                        color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                child: Image.network(bean.albumImage),
+                              ),
+                              Expanded(
+                                  child: Container(
+                                margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      bean.albumName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Color(0xFF274D85),
+                                        fontSize: 24.0,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 6.0,
+                                    ),
+                                    Text(
+                                      bean.artistName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Color(0xFF274D85),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )),
+//                            IconButton(
+//                                icon: Icon(
+//                                  Icons.favorite,
+//                                  color: Color(0xFF274D85),
+//                                  size: 32,
+//                                ),
+//                                onPressed: null)
+                            ],
+                          ),
+                        )),
+                  ),
                 ));
       },
       itemCount: list.length,

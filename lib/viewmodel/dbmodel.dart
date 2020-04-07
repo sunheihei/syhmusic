@@ -28,16 +28,14 @@ class DBModel extends ChangeNotifier {
   }
 
   Future saveFav(Results song) async {
-    favstreamController.add(false);
+//    favstreamController.add(true);
     Database db = await _dbProvider.getDataBase();
-    _dbProvider.insert(db, song);
+    _dbProvider.insert(db, song).then((value) => notifyListeners());
   }
 
   Future deleteFav(Results song) async {
-    favstreamController.add(true);
+//    favstreamController.add(false);
     Database db = await _dbProvider.getDataBase();
-    _dbProvider.delete(db, song);
+    _dbProvider.delete(db, song).then((value) => notifyListeners());
   }
-
-
 }
