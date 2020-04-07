@@ -5,16 +5,18 @@ import 'package:syhmusic/db/songdbprovider.dart';
 import 'package:syhmusic/module/song.dart';
 
 class DBModel extends ChangeNotifier {
-  StreamController favstreamController;
   SongDbProvider _dbProvider;
+  bool mIsFav = false;
 
   DBModel() {
     _dbProvider = SongDbProvider();
-    favstreamController = StreamController();
   }
 
   Future<void> updataFav(String songid) async {
-    favstreamController.add(await isFav(songid));
+    isFav(songid).then((value) {
+      mIsFav = value;
+      notifyListeners();
+    });
   }
 
   //判断是否已经保存
@@ -28,14 +30,18 @@ class DBModel extends ChangeNotifier {
   }
 
   Future saveFav(Results song) async {
-//    favstreamController.add(true);
     Database db = await _dbProvider.getDataBase();
-    _dbProvider.insert(db, song).then((value) => notifyListeners());
+    _dbProvider.insert(db, song).then((value) {
+      mIsFav = true;
+      notifyListeners();
+    });
   }
 
   Future deleteFav(Results song) async {
-//    favstreamController.add(false);
     Database db = await _dbProvider.getDataBase();
-    _dbProvider.delete(db, song).then((value) => notifyListeners());
+    _dbProvider.delete(db, song).then((value) {
+      mIsFav = false;
+      notifyListeners();
+    });
   }
 }

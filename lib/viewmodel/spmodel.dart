@@ -14,30 +14,34 @@ class SpModel with ChangeNotifier {
   StreamController<bool> shufflestreamController;
 
   SpModel() {
-    cyclestreamController = StreamController.broadcast();
-    shufflestreamController = StreamController.broadcast();
     //启动时读取保存的播放控制状态
     updataplaystatus();
   }
 
   void updataplaystatus() {
-    getShuffle().then((value) => shuffle = value);
     getCycle().then((value) => cycle = value);
+    getShuffle().then((value) => shuffle = value);
   }
 
   Future<void> updatacycle() async {
-    cyclestreamController.add(await getCycle());
+    getCycle().then((value){
+      cycle = value;
+      notifyListeners();
+    });
   }
 
   Future<void> updataradom() async {
-    shufflestreamController.add(await getShuffle());
+    getShuffle().then((value){
+      shuffle = value;
+      notifyListeners();
+    });
   }
 
   Future<void> setCycle(bool cycle) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(TAG_CYCLE, cycle);
     this.cycle = cycle;
-    updatacycle();
+    notifyListeners();
   }
 
   Future<bool> getCycle() async {
@@ -49,7 +53,7 @@ class SpModel with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(TAG_SHUFFLE, shuffle);
     this.shuffle = shuffle;
-    updataradom();
+    notifyListeners();
   }
 
   Future<bool> getShuffle() async {
