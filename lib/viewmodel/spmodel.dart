@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SpModel with ChangeNotifier {
   final String TAG_CYCLE = "cycle";
-  final String TAG_RANDOM = "random";
+  final String TAG_SHUFFLE = "shuffle";
 
   bool cycle = false;
   bool shuffle = false;
@@ -47,13 +47,13 @@ class SpModel with ChangeNotifier {
 
   Future<void> setShuffle(bool shuffle) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(TAG_RANDOM, shuffle);
+    await prefs.setBool(TAG_SHUFFLE, shuffle);
     this.shuffle = shuffle;
     updataradom();
   }
 
   Future<bool> getShuffle() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(TAG_RANDOM) ?? false;
+    return prefs.getBool(TAG_SHUFFLE) ?? false;
   }
 }
