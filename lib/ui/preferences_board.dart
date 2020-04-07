@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:syhmusic/db/songdbprovider.dart';
 import 'package:syhmusic/viewmodel/dbmodel.dart';
 import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
 import 'package:syhmusic/viewmodel/spmodel.dart';

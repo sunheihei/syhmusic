@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
+import 'package:syhmusic/search.dart';
 import 'package:syhmusic/viewmodel/dbmodel.dart';
 import 'package:syhmusic/viewmodel/spmodel.dart';
 
@@ -73,6 +74,7 @@ class _HomePagersState extends State<HomePagers> {
           return Future<bool>.value(false);
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: SlidingUpPanel(
             panel: ClipRRect(
               borderRadius: BorderRadius.only(
@@ -111,7 +113,8 @@ class _HomePagersState extends State<HomePagers> {
               ),
               child: GestureDetector(
                   child: bottombar(controller: _panelController),
-                  onTap: () => _panelController.open()),
+                  onTap: () => _panelController.open()
+              ),
             ),
             body: DefaultTabController(
               length: 3,
@@ -145,7 +148,7 @@ class _HomePagersState extends State<HomePagers> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
-                          "NEW",
+                          "SEARCH",
                           style: TextStyle(fontSize: 20.0),
                         ),
                       ),
@@ -161,19 +164,19 @@ class _HomePagersState extends State<HomePagers> {
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(
-                        Icons.search,
+                        Icons.settings,
                         size: 35,
                         color: Color(0xFF274D85),
                       ),
-                      tooltip: 'Search',
-                      onPressed: () => print('search button is pressed'),
+                      tooltip: 'Setting',
+                      onPressed: null
                     )
                   ],
                 ),
                 body: TabBarView(
                   key: UniqueKey(),
                   physics: BouncingScrollPhysics(),
-                  children: <Widget>[HomeMusic(0), Container(), Favorites()],
+                  children: <Widget>[HomeMusic(0), Search(), Favorites()],
                 ),
               ),
             ),
