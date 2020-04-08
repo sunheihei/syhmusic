@@ -111,15 +111,17 @@ class _HomePagersState extends State<HomePagers> {
                   ],
                 ),
               ),
-              child: GestureDetector(
-                  child: bottombar(controller: _panelController),
-                  onTap: () => _panelController.open()
-              ),
+              child: bottombar(controller: _panelController),
+//              GestureDetector(
+//                  child: bottombar(controller: _panelController),
+//                  onTap: () => _panelController.open()
+//              ),
             ),
             body: DefaultTabController(
               length: 3,
               initialIndex: 0,
               child: Scaffold(
+                resizeToAvoidBottomInset: false,
                 appBar: AppBar(
                   backgroundColor: Colors.white,
                   elevation: 0.0,
@@ -174,7 +176,6 @@ class _HomePagersState extends State<HomePagers> {
                   ],
                 ),
                 body: TabBarView(
-                  key: UniqueKey(),
                   physics: BouncingScrollPhysics(),
                   children: <Widget>[HomeMusic(0), Search(), Favorites()],
                 ),
