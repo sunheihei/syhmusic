@@ -1,35 +1,34 @@
+import 'dart:async';
 import 'dart:ui';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:syhmusic/view/listitemview.dart';
+import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
+import 'module/song.dart';
+
+Dio dio = Dio();
 
 class Search extends StatefulWidget {
   @override
   _SearchState createState() => _SearchState();
 }
 
-//https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&search=abc&type=single+albumtrack&client_id=16c28430&order=downloads_total&offset=0
-
 class _SearchState extends State<Search> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Column(
-          children: <Widget>[SearchInputText()],
-        ),
-      ),
-    );
-  }
-}
-
-class SearchInputText extends StatefulWidget {
-  @override
-  _SearchInputTextState createState() => _SearchInputTextState();
-}
-
-class _SearchInputTextState extends State<SearchInputText> {
+  bool _IsSearch = false;
   final searchEditingController = TextEditingController();
+  StreamController<List<Results>> _streamController;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    _streamController = StreamController.broadcast();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -38,8 +37,76 @@ class _SearchInputTextState extends State<SearchInputText> {
     super.dispose();
   }
 
+  void _addDataToStream(String searchkey) async {
+    print('Add data to stream.');
+    _streamController.sink.add(await getSearchData(searchkey));
+  }
+
+  Future<List<Results>> getSearchData(String searchkey) async {
+    String url =
+        "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&search=${searchkey}&type=single+albumtrack&client_id=16c28430&order=downloads_total&offset=0";
+    Response response = await dio.get(url);
+    Song song = Song.fromJson(response.data);
+    return song.results;
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            SearchInputText(),
+            Expanded(
+              child: SearchResult(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget SearchResult(BuildContext context) {
+    return StreamBuilder(
+      stream: _streamController.stream,
+      builder: (context, snapshot) {
+        if (!snapshot.data) {
+          if (_IsSearch) {
+            return Container(
+              color: Colors.white,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            return Container(
+              child: Text('no search'),
+            );
+          }
+        }
+        return buildListView(context, snapshot.data);
+      },
+    );
+  }
+
+  Widget buildListView(BuildContext context, List<Results> list) {
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        Results bean = list[index];
+        return Consumer(
+            builder: (context, PlayControlModel control, _) => GestureDetector(
+                onTap: () {
+                  control.setCurListSong(list, index);
+                  control.seturl(bean.audiodownload);
+                },
+                child: ListItemView(bean)));
+      },
+      itemCount: list.length,
+    );
+  }
+
+  Widget SearchInputText() {
     return Container(
         margin: EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 12.0),
         decoration: new BoxDecoration(
@@ -62,7 +129,8 @@ class _SearchInputTextState extends State<SearchInputText> {
                   size: 35,
                 )),
             onSubmitted: (value) {
-              debugPrint('submit: $value');
+              _IsSearch = true;
+              _addDataToStream(value);
             },
             style: new TextStyle(fontSize: 22, color: Color(0xFF274D85)),
             controller: searchEditingController,
