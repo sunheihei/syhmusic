@@ -18,15 +18,29 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   bool _IsSearch = false;
+  bool _Isloading = false;
+  bool _HasSearchString = false;
   final searchEditingController = TextEditingController();
   StreamController<List<Results>> _streamController;
 
-  @override
-  bool get wantKeepAlive => true;
+//  @override
+//  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     _streamController = StreamController.broadcast();
+
+    searchEditingController.addListener(() {
+      setState(() {
+        if (searchEditingController.text.length == 0) {
+          _HasSearchString = false;
+        } else {
+          _HasSearchString = true;
+        }
+      });
+//      print("_HasSearchString :${_HasSearchString}");
+    });
+
     super.initState();
   }
 
@@ -47,6 +61,7 @@ class _SearchState extends State<Search> {
         "https://api.jamendo.com/v3.0/tracks?format=json&include=lyrics&limit=70&search=${searchkey}&type=single+albumtrack&client_id=16c28430&order=downloads_total&offset=0";
     Response response = await dio.get(url);
     Song song = Song.fromJson(response.data);
+    _Isloading = false;
     return song.results;
   }
 
@@ -71,7 +86,7 @@ class _SearchState extends State<Search> {
     return StreamBuilder(
       stream: _streamController.stream,
       builder: (context, snapshot) {
-        if (!snapshot.data) {
+        if (!snapshot.hasData || _Isloading) {
           if (_IsSearch) {
             return Container(
               color: Colors.white,
@@ -115,26 +130,45 @@ class _SearchState extends State<Search> {
           color: Colors.white,
           borderRadius: new BorderRadius.all(new Radius.circular(15.0)),
         ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(6.0, 0.0, 6.0, 0.0),
-          child: TextField(
-            textInputAction: TextInputAction.search,
-            decoration: InputDecoration(
-                contentPadding: new EdgeInsets.only(left: 0.0),
-                fillColor: Colors.white,
-                border: InputBorder.none,
-                hintStyle: new TextStyle(fontSize: 18, color: Colors.white),
-                icon: Icon(
-                  Icons.search,
-                  size: 35,
-                )),
-            onSubmitted: (value) {
-              _IsSearch = true;
-              _addDataToStream(value);
-            },
-            style: new TextStyle(fontSize: 22, color: Color(0xFF274D85)),
-            controller: searchEditingController,
-          ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(6.0, 0.0, 6.0, 0.0),
+                child: TextField(
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.only(left: 0.0),
+                      fillColor: Colors.white,
+                      border: InputBorder.none,
+                      hintStyle:
+                          new TextStyle(fontSize: 18, color: Colors.white),
+                      icon: Icon(
+                        Icons.search,
+                        size: 35,
+                      )),
+                  onSubmitted: (value) {
+                    _IsSearch = true;
+                    _Isloading = true;
+                    _addDataToStream(value);
+                  },
+                  maxLines: 1,
+                  style: new TextStyle(fontSize: 22, color: Color(0xFF274D85)),
+                  controller: searchEditingController,
+                ),
+              ),
+            ),
+            Offstage(
+              offstage: !_HasSearchString,
+              child: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () {
+                    setState(() {
+                      searchEditingController.clear();
+                    });
+                  }),
+            )
+          ],
         ));
   }
 }

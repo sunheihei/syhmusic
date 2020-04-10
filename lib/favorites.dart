@@ -27,7 +27,6 @@ class _FavoritesState extends State<Favorites> {
   @override
   void dispose() {
     super.dispose();
-    // 这里不要忘了将监听移除
     _streamController.close();
   }
 
@@ -54,8 +53,8 @@ class _FavoritesState extends State<Favorites> {
                 ),
               );
             }
-            _Favlist = snapshot.data;
-            return buildListView(context, _Favlist);
+
+            return buildListView(context, snapshot.data);
           },
         ),
       ),
@@ -63,20 +62,19 @@ class _FavoritesState extends State<Favorites> {
   }
 
   Widget buildListView(BuildContext context, List<Results> list) {
+    _Favlist = list;
     return ListView.builder(
       itemBuilder: (context, index) {
         Results bean = list[index];
         return Consumer2(
             builder: (context, PlayControlModel control, DBModel db, _) =>
                 Dismissible(
-                  key: Key('key${index}'),
+                  key: Key(UniqueKey().toString()),
                   onDismissed: (direction) {
-                    //删除数据库当前数据
-                    db.deleteFav(bean);
+//                    _Favlist.removeAt(index);
+//                    //删除数据库当前数据
+                    db.deleteFavNoReFresh(bean);
                     //刷新当前列表展示
-                    setState(() {
-                      _Favlist.removeAt(index);
-                    });
                   },
                   background: Container(
                       color: Colors.red,

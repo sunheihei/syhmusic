@@ -5,6 +5,8 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/bottombar.dart';
 import 'package:syhmusic/homemusic.dart';
 import 'package:syhmusic/search.dart';
+import 'package:syhmusic/setting.dart';
+import 'package:syhmusic/view/customroute.dart';
 import 'package:syhmusic/viewmodel/dbmodel.dart';
 import 'package:syhmusic/viewmodel/spmodel.dart';
 
@@ -32,8 +34,6 @@ class MyApp extends StatelessWidget {
             return control;
           },
         )
-
-//        ChangeNotifierProvider(create: (_) => PlayControlModel()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -171,7 +171,9 @@ class _HomePagersState extends State<HomePagers> {
                         color: Color(0xFF274D85),
                       ),
                       tooltip: 'Setting',
-                      onPressed: null
+                      onPressed: ()=>
+                            Navigator.of(context).push(CustomRoute(Settings()))
+//                          Navigator.of(context).push(MaterialPageRoute(builder:(context)=>Settings()))
                     )
                   ],
                 ),

@@ -44,4 +44,11 @@ class DBModel extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  Future deleteFavNoReFresh(Results song) async {
+    Database db = await _dbProvider.getDataBase();
+    _dbProvider.delete(db, song).then((value) {
+    });
+  }
+
 }
