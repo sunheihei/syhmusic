@@ -4,8 +4,13 @@ import 'package:syhmusic/module/song.dart';
 class ListItemView extends StatelessWidget {
 
   Results _bean;
-
-  ListItemView(this._bean);
+  int _type; //区分使用场景
+  /**
+   * 0 home
+   * 1 search
+   * 2 favroite
+   */
+  ListItemView(this._type,this._bean);
 
   @override
   Widget build(BuildContext context) {

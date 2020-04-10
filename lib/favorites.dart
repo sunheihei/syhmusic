@@ -78,9 +78,12 @@ class _FavoritesState extends State<Favorites> {
                   },
                   background: Container(
                       color: Colors.red,
-                      // 这里使用 ListTile 因为可以快速设置左右两端的Icon
                       child: Center(
                         child: ListTile(
+                          trailing: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
                           leading: Icon(
                             Icons.delete,
                             color: Colors.white,
@@ -88,15 +91,42 @@ class _FavoritesState extends State<Favorites> {
                         ),
                       )),
                   child: GestureDetector(
+                    onLongPress: (){
+                      showDeleteConfirmDialog1(context);
+                    },
                     onTap: () {
                       control.setCurListSong(list, index);
                       control.seturl(bean.audiodownload);
                     },
-                    child: ListItemView(bean),
+                    child: ListItemView(2,bean),
                   ),
                 ));
       },
       itemCount: list.length,
     );
   }
+}
+
+Future<bool> showDeleteConfirmDialog1(BuildContext context) {
+  return showDialog<bool>(context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text("提示"),
+        content: Text("您确定要删除当前文件吗?"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("取消"),
+            onPressed: () => Navigator.of(context).pop(), // 关闭对话框
+          ),
+          FlatButton(
+            child: Text("删除"),
+            onPressed: () {
+              //关闭对话框并返回true
+              Navigator.of(context).pop(true);
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

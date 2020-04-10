@@ -15,5 +15,5 @@ https://developer.jamendo.com/v3.0/albums
 状态管理主要用了provider配合自带的stream
 
 仅供学习
-![Image text](https://github.com/sunheihei/syhmusic/blob/master/android/app/src/main/res/drawable/Screenshot_20200410-160718.png)
-![Image text](https://github.com/sunheihei/syhmusic/blob/master/android/app/src/main/res/drawable/Screenshot_20200410-160742.png)
+![Image text](https://github.com/sunheihei/syhmusic/blob/master/android/app/src/main/res/drawable/screenshot1.png)
+![Image text](https://github.com/sunheihei/syhmusic/blob/master/android/app/src/main/res/drawable/screenshot2.png)

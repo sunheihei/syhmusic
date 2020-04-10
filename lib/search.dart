@@ -115,7 +115,7 @@ class _SearchState extends State<Search> {
                   control.setCurListSong(list, index);
                   control.seturl(bean.audiodownload);
                 },
-                child: ListItemView(bean)));
+                child: ListItemView(1,bean)));
       },
       itemCount: list.length,
     );

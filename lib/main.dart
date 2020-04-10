@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syhmusic/bottombar.dart';
@@ -10,9 +10,7 @@ import 'package:syhmusic/view/customroute.dart';
 import 'package:syhmusic/viewmodel/dbmodel.dart';
 import 'package:syhmusic/viewmodel/spmodel.dart';
 
-import 'unusedui/drawerdemo.dart';
 import 'favorites.dart';
-import 'unusedui/player.dart';
 import 'ui/now_playing_screen.dart';
 import 'viewmodel/durationmodel.dart';
 import 'viewmodel/playcontrolmodel.dart';
@@ -38,7 +36,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'syhmusic',
-          home: SafeArea(child: HomePagers())),
+          home: HomePagers()),
     );
   }
 }
@@ -112,10 +110,6 @@ class _HomePagersState extends State<HomePagers> {
                 ),
               ),
               child: bottombar(controller: _panelController),
-//              GestureDetector(
-//                  child: bottombar(controller: _panelController),
-//                  onTap: () => _panelController.open()
-//              ),
             ),
             body: DefaultTabController(
               length: 3,
@@ -123,6 +117,7 @@ class _HomePagersState extends State<HomePagers> {
               child: Scaffold(
                 resizeToAvoidBottomInset: false,
                 appBar: AppBar(
+                  brightness: Brightness.dark,
                   backgroundColor: Colors.white,
                   elevation: 0.0,
                   automaticallyImplyLeading: false,
@@ -165,16 +160,16 @@ class _HomePagersState extends State<HomePagers> {
                   ),
                   actions: <Widget>[
                     IconButton(
-                      icon: Icon(
-                        Icons.settings,
-                        size: 35,
-                        color: Color(0xFF274D85),
-                      ),
-                      tooltip: 'Setting',
-                      onPressed: ()=>
+                        icon: Icon(
+                          Icons.settings,
+                          size: 35,
+                          color: Color(0xFF274D85),
+                        ),
+                        tooltip: 'Setting',
+                        onPressed: () =>
                             Navigator.of(context).push(CustomRoute(Settings()))
 //                          Navigator.of(context).push(MaterialPageRoute(builder:(context)=>Settings()))
-                    )
+                        )
                   ],
                 ),
                 body: TabBarView(

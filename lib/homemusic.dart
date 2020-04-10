@@ -114,7 +114,7 @@ class HomeMusicState extends State<HomeMusic>
                     control.setCurListSong(list, index);
                     control.seturl(bean.audiodownload);
                   },
-                  child: ListItemView(bean)
+                  child: ListItemView(0,bean)
                 ));
       },
       itemCount: list.length + 1,
