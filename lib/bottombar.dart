@@ -25,8 +25,7 @@ class BottomState extends State<bottombar> {
     // TODO: implement build
     return Container(
         height: double.infinity,
-        child:
-            Consumer(builder: (context, PlayControlModel control, _) {
+        child: Consumer(builder: (context, PlayControlModel control, _) {
           if (control.getcursong != null) {
             mcursong = true;
           }
@@ -43,8 +42,8 @@ class BottomState extends State<bottombar> {
                 ),
                 Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,7 +134,18 @@ class BottomState extends State<bottombar> {
                     ),
                     Consumer2(builder: (context, DurtionModel durtion,
                         PlayControlModel _player, _) {
-                      final duration = durtion.duration ?? Duration.zero;
+                      Duration tempduration;
+                      if (mcursong) {
+                        tempduration = Duration(
+                            days: 0,
+                            hours: 0,
+                            minutes: 0,
+                            seconds: _player.cursong.duration.toInt(),
+                            milliseconds: 0,
+                            microseconds: 0);
+                      }
+                      final duration =
+                          durtion.duration ?? tempduration ?? Duration.zero;
                       var position = durtion.position ?? Duration.zero;
                       if (position > duration) {
                         position = duration;

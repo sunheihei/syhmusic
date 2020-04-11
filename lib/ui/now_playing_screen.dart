@@ -65,7 +65,17 @@ class NowPlayingScreen extends StatelessWidget {
           ),
           Consumer2(builder:
               (context, DurtionModel durtion, PlayControlModel _player, _) {
-            final duration = durtion.duration ?? Duration.zero;
+            Duration tempduration;
+            if (_player.cursong != null) {
+              tempduration = Duration(
+                  days: 0,
+                  hours: 0,
+                  minutes: 0,
+                  seconds: _player.cursong.duration.toInt(),
+                  milliseconds: 0,
+                  microseconds: 0);
+            }
+            final duration = durtion.duration ?? tempduration ?? Duration.zero;
             var position = durtion.position ?? Duration.zero;
             if (position > duration) {
               position = duration;
