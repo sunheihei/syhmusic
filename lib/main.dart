@@ -167,8 +167,8 @@ class _HomePagersState extends State<HomePagers> {
                         ),
                         tooltip: 'Setting',
                         onPressed: () =>
-                            Navigator.of(context).push(CustomRoute(Settings()))
-//                          Navigator.of(context).push(MaterialPageRoute(builder:(context)=>Settings()))
+//                            Navigator.of(context).push(CustomRoute(Settings()))
+                          Navigator.of(context).push(MaterialPageRoute(builder:(context)=>Settings()))
                         )
                   ],
                 ),

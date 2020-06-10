@@ -41,7 +41,6 @@ class HomeMusicState extends State<HomeMusic>
     _addDataToStream();
   }
 
-
   void _addDataToStream() async {
     print('Add data to stream.');
     _streamController.sink.add(await getData());
@@ -107,15 +106,12 @@ class HomeMusicState extends State<HomeMusic>
         }
         Results bean = list[index];
         return Consumer(
-            builder: (context ,PlayControlModel control,
-                    _) =>
-                GestureDetector(
-                  onTap: () {
-                    control.setCurListSong(list, index);
-                    control.seturl(bean.audiodownload);
-                  },
-                  child: ListItemView(0,bean)
-                ));
+            builder: (context, PlayControlModel control, _) => GestureDetector(
+                onTap: () {
+                  control.setCurListSong(list, index);
+                  control.seturl(bean.audiodownload);
+                },
+                child: ListItemView(0, bean)));
       },
       itemCount: list.length + 1,
       controller: _scrollController,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:syhmusic/view/DialogView.dart';
 import 'package:syhmusic/view/listitemview.dart';
 import 'package:syhmusic/viewmodel/playcontrolmodel.dart';
 
@@ -91,9 +92,6 @@ class _FavoritesState extends State<Favorites> {
                         ),
                       )),
                   child: GestureDetector(
-                    onLongPress: (){
-                      showDeleteConfirmDialog1(context);
-                    },
                     onTap: () {
                       control.setCurListSong(list, index);
                       control.seturl(bean.audiodownload);
@@ -107,26 +105,4 @@ class _FavoritesState extends State<Favorites> {
   }
 }
 
-Future<bool> showDeleteConfirmDialog1(BuildContext context) {
-  return showDialog<bool>(context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text("提示"),
-        content: Text("您确定要删除当前文件吗?"),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("取消"),
-            onPressed: () => Navigator.of(context).pop(), // 关闭对话框
-          ),
-          FlatButton(
-            child: Text("删除"),
-            onPressed: () {
-              //关闭对话框并返回true
-              Navigator.of(context).pop(true);
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+
