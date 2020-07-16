@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syhmusic/module/song.dart';
+import 'package:syhmusic/viewmodel/dbmodel.dart';
 
 import 'DialogView.dart';
 
@@ -25,7 +27,8 @@ class ListItemView extends StatelessWidget {
             children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                child: Image.network(_bean.albumImage),
+//                child: Image.network(_bean.albumImage),
+                child: FadeInImage.assetNetwork(placeholder: 'assets/images/img_placeholder.png', image: _bean.albumImage),
               ),
               Expanded(
                   child: Container(
@@ -58,28 +61,32 @@ class ListItemView extends StatelessWidget {
                   ],
                 ),
               )),
-              IconButton(
-                icon: Icon(
-                  Icons.more_vert,
-                  color: Color(0xFF274D85),
-                  size: 32,
-                ),
-                onPressed: null,
-//                   dialog test
-//                  onPressed: () async {
-//                    print("onPressed");
-//                    if (_type == 2) {
-//                      bool delete = await showDeleteConfirmDialog(context);
-//                      if (delete) {
-//                        print("$delete");
-//                      }
-//                    }
-//                  }
-              )
+              MoreIconButton(context, _type, _bean)
             ],
           ),
         ));
   }
+}
+
+Widget MoreIconButton(BuildContext context, int _type, Results bean) {
+  return Consumer(builder: (context, DBModel db, _) {
+    return IconButton(
+        icon: Icon(
+          Icons.more_vert,
+          color: Color(0xFF274D85),
+          size: 32,
+        ),
+//        dialog test
+        onPressed: () async {
+          print("onPressed");
+          if (_type == 2) {
+            bool delete = await showDeleteConfirmDialog(context);
+            if (delete) {
+              db.deleteFav(bean);
+            }
+          }
+        });
+  });
 }
 
 Future<bool> showDeleteConfirmDialog(BuildContext context) {

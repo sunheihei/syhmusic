@@ -17,7 +17,7 @@ class DurtionModel with ChangeNotifier {
   }
 
   void onDuration(Duration event) {
-    print('onDuration :${event}');
+//    print('onDuration :${event}');
     duration = event;
     notifyListeners();
   }

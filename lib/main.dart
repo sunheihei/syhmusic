@@ -152,7 +152,7 @@ class _HomePagersState extends State<HomePagers> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
-                          "FAVORITES",
+                          "FAVORITE",
                           style: TextStyle(fontSize: 20.0),
                         ),
                       ),

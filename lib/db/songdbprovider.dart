@@ -83,9 +83,9 @@ class SongDbProvider extends BaseDbProvider {
   Future<List<Results>> getFavSongList() async {
     Database db = await getDataBase();
     List<Map<String, dynamic>> maps = await db.query(name);
-    maps[0].forEach((String key,dynamic value){
-      print("$key  $value");
-    });
+//    maps[0].forEach((String key,dynamic value){
+//      print("$key  $value");
+//    });
     if (maps.length > 0) {
       List<Results> favsonglist =
           maps.map((item) => Results.fromJson(item)).toList();

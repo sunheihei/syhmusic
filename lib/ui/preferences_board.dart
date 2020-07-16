@@ -10,6 +10,7 @@ class PreferencesBoard extends StatelessWidget {
     return Consumer3(builder: (context, SpModel sp, PlayControlModel control, DBModel dbModel, _) {
       sp.updatacycle();
       sp.updataradom();
+
       if (control.cursong != null) {
         dbModel.updataFav(control.cursong.songid);
       }

@@ -69,40 +69,17 @@ class _FavoritesState extends State<Favorites> {
         Results bean = list[index];
         return Consumer2(
             builder: (context, PlayControlModel control, DBModel db, _) =>
-                Dismissible(
-                  key: Key(UniqueKey().toString()),
-                  onDismissed: (direction) {
-//                    _Favlist.removeAt(index);
-//                    //删除数据库当前数据
-                    db.deleteFavNoReFresh(bean);
-                    //刷新当前列表展示
+                GestureDetector(
+                  onTap: () {
+                    debugPrint("fav click");
+                    control.setCurListSong(list, index);
+                    control.seturl(bean.audiodownload);
                   },
-                  background: Container(
-                      color: Colors.red,
-                      child: Center(
-                        child: ListTile(
-                          trailing: Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                          leading: Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )),
-                  child: GestureDetector(
-                    onTap: () {
-                      control.setCurListSong(list, index);
-                      control.seturl(bean.audiodownload);
-                    },
-                    child: ListItemView(2,bean),
-                  ),
-                ));
+                  child: ListItemView(2, bean),
+                )
+            );
       },
       itemCount: list.length,
     );
   }
 }
-
-
